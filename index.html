@@ -95,7 +95,9 @@ main{max-width:1180px; margin:0 auto; padding:0 22px;}
 .seg-win{font-size:10.5px; opacity:.92; font-weight:600; white-space:nowrap;}
 
 /* phase filter */
-.filters{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;}
+.filter-label{font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted); font-weight:700; margin:14px 0 6px;}
+.filters{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:2px;}
 .filters button{font:inherit; font-size:12.5px; font-weight:700; cursor:pointer;
   border:1px solid var(--line); background:#fff; color:var(--ink2); border-radius:20px; padding:7px 14px;}
 .filters button.on{background:var(--ink); color:#fff; border-color:var(--ink)}
@@ -103,29 +105,63 @@ main{max-width:1180px; margin:0 auto; padding:0 22px;}
 .filters button.alto.on{background:var(--alto); border-color:var(--alto)}
 .filters button.medio.on{background:var(--medio); border-color:var(--medio)}
 
-/* phases & cards */
+/* phases & task list */
 .phase{margin-top:40px; scroll-margin-top:76px;}
-.phase-head{display:flex; align-items:center; gap:16px; margin-bottom:18px;
+.phase-head{display:flex; align-items:center; gap:16px; margin-bottom:14px;
   padding-bottom:12px; border-bottom:2px solid var(--accent);}
 .phase-id{font-family:"Anton",sans-serif; font-size:30px; color:#fff; background:var(--accent);
   width:62px; height:62px; display:flex; align-items:center; justify-content:center; border-radius:13px; flex:none;}
 .phase-head h3{font-size:23px; font-weight:800; letter-spacing:-.2px;}
 .phase-meta{font-family:"JetBrains Mono",monospace; font-size:12.5px; color:var(--muted); margin-top:4px;}
-.obj-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:14px;}
-.obj{background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent);
-  border-radius:11px; padding:15px 16px 14px; display:flex; flex-direction:column;}
-.obj-head{display:flex; align-items:center; gap:9px; margin-bottom:8px; flex-wrap:wrap;}
+.phase-meta .ph-done{color:var(--medio)}
+
+.task-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+.task{display:flex; gap:14px; align-items:flex-start; background:#fff; border:1px solid var(--line);
+  border-left:4px solid var(--accent); border-radius:11px; padding:14px 16px; transition:.18s;}
+.task .status{flex:none; margin-top:1px; background:none; border:0; cursor:pointer; padding:2px; line-height:0;}
+.task .box{display:block; width:24px; height:24px; border:2px solid #C9BCAD; border-radius:7px;
+  position:relative; transition:.15s; background:#fff;}
+.task .status:hover .box{border-color:var(--accent)}
+.task-body{flex:1; min-width:0;}
+.task-top{display:flex; align-items:center; gap:9px; margin-bottom:4px; flex-wrap:wrap;}
 .code{font-family:"JetBrains Mono",monospace; font-weight:700; font-size:13px; color:var(--orange);}
-.pill{font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;
+.pill{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.5px;
   padding:3px 8px; border-radius:20px; color:#fff;}
 .pill.crit{background:var(--crit)} .pill.alto{background:var(--alto)} .pill.medio{background:var(--medio)}
+.state-tag{font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.5px; padding:3px 8px; border-radius:20px; border:1px solid var(--line); color:var(--muted);}
 .dates{font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--muted); margin-left:auto;}
-.obj h4{font-size:15.5px; font-weight:700; margin-bottom:5px; line-height:1.25;}
-.obj p{font-size:13.5px; color:var(--ink2); margin:0 0 11px;}
-.obj-foot{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:auto;}
+.task h4{font-size:16px; font-weight:700; margin-bottom:4px; line-height:1.25;}
+.task p{font-size:13.5px; color:var(--ink2); margin:0 0 9px;}
+.task-foot{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
 .tag{font-size:11px; font-weight:600; color:var(--ink2); background:var(--paper2);
   border:1px solid var(--line); padding:3px 8px; border-radius:6px;}
 .dep{font-family:"JetBrains Mono",monospace; font-size:10.5px; color:var(--muted);}
+
+/* status: en curso */
+.task[data-status="en-curso"]{border-left-color:var(--alto); background:#FFFBF3;}
+.task[data-status="en-curso"] .box{border-color:var(--alto); background:
+  radial-gradient(circle at center, var(--alto) 0 5px, transparent 6px);}
+.task[data-status="en-curso"] .state-tag{color:#fff; background:var(--alto); border-color:var(--alto);}
+/* status: finalizada */
+.task[data-status="finalizada"]{border-left-color:var(--medio); background:#F1F8F2; opacity:.72;}
+.task[data-status="finalizada"] .box{border-color:var(--medio); background:var(--medio);}
+.task[data-status="finalizada"] .box::after{content:""; position:absolute; left:7px; top:3px;
+  width:6px; height:11px; border:solid #fff; border-width:0 2.5px 2.5px 0; transform:rotate(45deg);}
+.task[data-status="finalizada"] .state-tag{color:#fff; background:var(--medio); border-color:var(--medio);}
+.task[data-status="finalizada"] h4{text-decoration:line-through; text-decoration-color:#9DB9A4;}
+
+/* progress summary */
+.progress{background:var(--char); color:#fff; border-radius:13px; padding:18px 20px; margin:6px 0 22px;}
+.progress-bar{height:12px; background:#2c211c; border-radius:20px; overflow:hidden;}
+.progress-bar span{display:block; height:100%; width:0; border-radius:20px;
+  background:linear-gradient(90deg,var(--orange),#3ec07a); transition:width .35s ease;}
+.progress-stats{display:flex; flex-wrap:wrap; align-items:center; gap:6px 16px; margin-top:12px; font-size:13.5px; color:#cdbfb2;}
+.progress-stats b{font-family:"Anton",sans-serif; font-size:22px; color:#fff; letter-spacing:.5px;}
+.progress-stats .s-done{color:#7fe0a6} .progress-stats .s-prog{color:#f0b65c} .progress-stats .s-pend{color:#cdbfb2}
+#resetBtn{margin-left:auto; font:inherit; font-size:12px; font-weight:700; cursor:pointer; color:#cdbfb2;
+  background:#241a16; border:1px solid #38291f; border-radius:8px; padding:7px 12px;}
+#resetBtn:hover{color:#fff; border-color:var(--orange)}
 .crit-close{font-size:12px; color:var(--muted); margin-top:10px; padding-top:9px; border-top:1px dashed var(--line);}
 .crit-close span{font-family:"JetBrains Mono",monospace; font-size:10px; text-transform:uppercase;
   letter-spacing:.5px; color:var(--accent); font-weight:700; margin-right:6px;}
@@ -161,8 +197,9 @@ footer p{font-size:13px; max-width:640px; margin:12px auto 0;}
     background:var(--char); padding:10px; gap:4px; max-height:70vh; overflow:auto;}
   .navlinks.open a{font-size:14px; padding:11px 14px}
   .cols{grid-template-columns:1fr}
-  .obj-grid{grid-template-columns:1fr}
+  .task .dates{margin-left:0; width:100%; order:5}
   .seg-win{display:none}
+  #resetBtn{margin-left:0}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto; transition:none!important}}
 </style>
@@ -234,13 +271,34 @@ footer p{font-size:13px; max-width:640px; margin:12px auto 0;}
   <section class="section" id="fases">
     <div class="sec-num">02</div>
     <h2 class="sec-title">Objetivos por fase</h2>
-    <p class="lead">Seis fases ordenadas por temporalidad: cada fase es una ventana de tiempo en la que varias áreas trabajan en paralelo, no un departamento. Dentro de cada fase, las tareas van por fecha y prioridad.</p>
+    <p class="lead">Seis fases ordenadas por temporalidad: cada fase es una ventana de tiempo en la que varias áreas trabajan en paralelo, no un departamento. Dentro de cada fase, las tareas van por fecha y prioridad. Marca el estado de cada tarea con la casilla; el avance se guarda en este navegador.</p>
     <div class="rail"><a class="seg" href="#F1" style="--accent:#E8500A;flex:25" title="Cimientos y Definición"><span class="seg-id">F1</span><span class="seg-win">1 – 25 jul</span></a><a class="seg" href="#F2" style="--accent:#C9421E;flex:35" title="Obra, Trámites y Abasto"><span class="seg-id">F2</span><span class="seg-win">19 jul – 31 ago</span></a><a class="seg" href="#F3" style="--accent:#B26A12;flex:27" title="Instalación, Sistemas y Equipo"><span class="seg-id">F3</span><span class="seg-win">25 ago – 20 sep</span></a><a class="seg" href="#F4" style="--accent:#6E8B2A;flex:33" title="Equipo, Producto y Capacitación"><span class="seg-id">F4</span><span class="seg-win">1 sep – 3 oct</span></a><a class="seg" href="#F5" style="--accent:#2E7D6B;flex:34" title="Marketing, Pruebas y Lanzamiento"><span class="seg-id">F5</span><span class="seg-win">1 oct – 3 nov</span></a><a class="seg" href="#F6" style="--accent:#2B5E8A;flex:15" title="Post-apertura y Estabilización"><span class="seg-id">F6</span><span class="seg-win">3 – 17 nov</span></a></div>
+
+    <div class="progress">
+      <div class="progress-bar"><span id="barFill"></span></div>
+      <div class="progress-stats">
+        <b id="pctDone">0%</b>
+        <span class="s-done"><b id="cntDone" style="font-size:13.5px">0</b> finalizadas</span>
+        <span class="s-prog"><b id="cntProg" style="font-size:13.5px">0</b> en curso</span>
+        <span class="s-pend"><b id="cntPend" style="font-size:13.5px">99</b> pendientes</span>
+        <span>de <b id="cntTotal" style="font-size:13.5px">99</b> tareas</span>
+        <button id="resetBtn" type="button">Reiniciar avance</button>
+      </div>
+    </div>
+
+    <div class="filter-label">Prioridad</div>
     <div class="filters" id="filters">
       <button data-f="all" class="on">Todas</button>
       <button data-f="crit" class="crit">Críticas</button>
       <button data-f="alto" class="alto">Altas</button>
       <button data-f="medio" class="medio">Medias</button>
+    </div>
+    <div class="filter-label">Estado</div>
+    <div class="filters" id="statusFilters">
+      <button data-s="all" class="on">Todos</button>
+      <button data-s="pendiente">Pendientes</button>
+      <button data-s="en-curso">En curso</button>
+      <button data-s="finalizada">Finalizadas</button>
     </div>
     
       <section class="phase" id="F1" style="--accent:#E8500A">
@@ -248,142 +306,214 @@ footer p{font-size:13px; max-width:640px; margin:12px auto 0;}
           <div class="phase-id">F1</div>
           <div>
             <h3>Cimientos y Definición</h3>
-            <div class="phase-meta">1 – 25 jul · 12 tareas · 3 críticas</div>
+            <div class="phase-meta">1 – 25 jul · 12 tareas · 3 críticas · <b class="ph-done" data-phase="F1" data-total="12">0</b>/12 finalizadas</div>
           </div>
         </header>
-        <div class="obj-grid">
-        <article class="obj" data-prio="alto" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-001</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">01-jul-2026 → 05-jul-2026</span>
+        <ul class="task-list">
+        <li class="task" data-id="PD-001" data-prio="alto" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-001">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-001</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-jul-2026 → 05-jul-2026</span>
+            </div>
+            <h4>Visita física al local en el Roof</h4>
+            <p>Reconocimiento del espacio: dimensiones, accesos, ubicación dentro del Roof, colindancias, tráfico peatonal y visibilidad desde la plaza.</p>
+            <div class="task-foot"><span class="tag">Proyectos</span><span class="tag">Expansión</span><span class="tag">Karla</span></div>
+            <div class="crit-close"><span>Cierre</span> Reporte escrito con fotos, medidas y observaciones subido a Asana.</div>
           </div>
-          <h4>Visita física al local en el Roof</h4>
-          <p>Reconocimiento del espacio: dimensiones, accesos, ubicación dentro del Roof, colindancias, tráfico peatonal y visibilidad desde la plaza.</p>
-          <div class="obj-foot"><span class="tag">Proyectos</span><span class="tag">Expansión</span><span class="tag">Karla</span></div>
-          <div class="crit-close"><span>Cierre</span> Reporte escrito con fotos, medidas y observaciones subido a Asana.</div>
-        </article>
-        <article class="obj" data-prio="crit" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-002</span>
-            <span class="pill crit">Crítico</span>
-            <span class="dates">05-jul-2026 → 07-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-002" data-prio="crit" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-002">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-002</span>
+              <span class="pill crit">Crítico</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-jul-2026 → 07-jul-2026</span>
+            </div>
+            <h4>Decisión socios: ¿habrá desayunos?</h4>
+            <p>Resolución de la decisión pendiente. Impacta diseño de cocina, menú, manuales operativos y plantilla.</p>
+            <div class="task-foot"><span class="tag">Dirección General</span><span class="tag">Gustavo</span><span class="dep">↳ PD-001</span></div>
+            <div class="crit-close"><span>Cierre</span> Decisión comunicada por escrito a Karla y Dir. Gastronómica.</div>
           </div>
-          <h4>Decisión socios: ¿habrá desayunos?</h4>
-          <p>Resolución de la decisión pendiente. Impacta diseño de cocina, menú, manuales operativos y plantilla.</p>
-          <div class="obj-foot"><span class="tag">Dirección General</span><span class="tag">Gustavo</span><span class="dep">↳ PD-001</span></div>
-          <div class="crit-close"><span>Cierre</span> Decisión comunicada por escrito a Karla y Dir. Gastronómica.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-003</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">07-jul-2026 → 10-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-003" data-prio="medio" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-003">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-003</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">07-jul-2026 → 10-jul-2026</span>
+            </div>
+            <h4>Aprendizajes de aperturas previas</h4>
+            <p>Checklist de aperturas anteriores con Liz + encuesta interna (La Mexicana, Shibolet). Consolidar lista &#x27;no repetir&#x27; / &#x27;sí replicar&#x27;.</p>
+            <div class="task-foot"><span class="tag">Proyectos</span><span class="tag">Karla + Shibolet</span></div>
+            <div class="crit-close"><span>Cierre</span> Documento de aprendizajes consolidado disponible en Asana.</div>
           </div>
-          <h4>Aprendizajes de aperturas previas</h4>
-          <p>Checklist de aperturas anteriores con Liz + encuesta interna (La Mexicana, Shibolet). Consolidar lista &#x27;no repetir&#x27; / &#x27;sí replicar&#x27;.</p>
-          <div class="obj-foot"><span class="tag">Proyectos</span><span class="tag">Karla + Shibolet</span></div>
-          <div class="crit-close"><span>Cierre</span> Documento de aprendizajes consolidado disponible en Asana.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-004</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">08-jul-2026 → 15-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-004" data-prio="alto" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-004">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-004</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">08-jul-2026 → 15-jul-2026</span>
+            </div>
+            <h4>Brief de concepto y experiencia</h4>
+            <p>Documento que fija la experiencia Chubbies en el Roof: smash burger, flujo de autoservicio con kioscos, rol del Host, pantallas y ambiente. Estándar, no improvisación.</p>
+            <div class="task-foot"><span class="tag">Brand PM</span><span class="tag">Dir. Operaciones</span><span class="dep">↳ PD-001</span></div>
+            <div class="crit-close"><span>Cierre</span> Brief aprobado por DG y compartido con todas las áreas.</div>
           </div>
-          <h4>Brief de concepto y experiencia</h4>
-          <p>Documento que fija la experiencia Chubbies en el Roof: smash burger, flujo de autoservicio con kioscos, rol del Host, pantallas y ambiente. Estándar, no improvisación.</p>
-          <div class="obj-foot"><span class="tag">Brand PM</span><span class="tag">Dir. Operaciones</span><span class="dep">↳ PD-001</span></div>
-          <div class="crit-close"><span>Cierre</span> Brief aprobado por DG y compartido con todas las áreas.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-005</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">08-jul-2026 → 15-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-005" data-prio="medio" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-005">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-005</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">08-jul-2026 → 15-jul-2026</span>
+            </div>
+            <h4>Definición de capacidad y aforo</h4>
+            <p>Asientos, aforo permitido por la plaza, proyección de cubiertos y rotación. Insumo del modelo financiero.</p>
+            <div class="task-foot"><span class="tag">Proyectos</span><span class="tag">Finanzas</span><span class="dep">↳ PD-001</span></div>
+            <div class="crit-close"><span>Cierre</span> Capacidad y aforo documentados y validados contra reglamento de plaza.</div>
           </div>
-          <h4>Definición de capacidad y aforo</h4>
-          <p>Asientos, aforo permitido por la plaza, proyección de cubiertos y rotación. Insumo del modelo financiero.</p>
-          <div class="obj-foot"><span class="tag">Proyectos</span><span class="tag">Finanzas</span><span class="dep">↳ PD-001</span></div>
-          <div class="crit-close"><span>Cierre</span> Capacidad y aforo documentados y validados contra reglamento de plaza.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-006</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">10-jul-2026 → 14-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-006" data-prio="alto" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-006">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-006</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-jul-2026 → 14-jul-2026</span>
+            </div>
+            <h4>Junta de alineación de planos con Liz</h4>
+            <p>Revisión de planos del local, feedback sobre layout de cocina (especialmente si hay desayunos), confirmación de distribución y flujo Host/kioscos.</p>
+            <div class="task-foot"><span class="tag">Proyectos</span><span class="tag">Karla + Liz</span><span class="dep">↳ PD-001, PD-002</span></div>
+            <div class="crit-close"><span>Cierre</span> Planos revisados y aprobados por Liz. Comentarios registrados.</div>
           </div>
-          <h4>Junta de alineación de planos con Liz</h4>
-          <p>Revisión de planos del local, feedback sobre layout de cocina (especialmente si hay desayunos), confirmación de distribución y flujo Host/kioscos.</p>
-          <div class="obj-foot"><span class="tag">Proyectos</span><span class="tag">Karla + Liz</span><span class="dep">↳ PD-001, PD-002</span></div>
-          <div class="crit-close"><span>Cierre</span> Planos revisados y aprobados por Liz. Comentarios registrados.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-007</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">10-jul-2026 → 18-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-007" data-prio="alto" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-007">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-007</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-jul-2026 → 18-jul-2026</span>
+            </div>
+            <h4>Plan por departamento</h4>
+            <p>Cada área entrega un plan nuevo y fechado: metas y prioridades de hoy a apertura y primeros 30 días post-apertura.</p>
+            <div class="task-foot"><span class="tag">Brand PM</span><span class="tag">Jefes de área</span></div>
+            <div class="crit-close"><span>Cierre</span> Plan entregado por cada departamento y consolidado por el PM.</div>
           </div>
-          <h4>Plan por departamento</h4>
-          <p>Cada área entrega un plan nuevo y fechado: metas y prioridades de hoy a apertura y primeros 30 días post-apertura.</p>
-          <div class="obj-foot"><span class="tag">Brand PM</span><span class="tag">Jefes de área</span></div>
-          <div class="crit-close"><span>Cierre</span> Plan entregado por cada departamento y consolidado por el PM.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-008</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">10-jul-2026 → 18-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-008" data-prio="medio" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-008">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-008</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-jul-2026 → 18-jul-2026</span>
+            </div>
+            <h4>Identidad de ambiente bloqueada</h4>
+            <p>Brief de música por daypart, diseño de iluminación, concepto de uniforme, señalética y branding físico. Nada queda &#x27;por definir&#x27;.</p>
+            <div class="task-foot"><span class="tag">Brand PM</span><span class="tag">Marketing</span><span class="dep">↳ PD-004</span></div>
+            <div class="crit-close"><span>Cierre</span> Decisiones de ambiente documentadas y aprobadas.</div>
           </div>
-          <h4>Identidad de ambiente bloqueada</h4>
-          <p>Brief de música por daypart, diseño de iluminación, concepto de uniforme, señalética y branding físico. Nada queda &#x27;por definir&#x27;.</p>
-          <div class="obj-foot"><span class="tag">Brand PM</span><span class="tag">Marketing</span><span class="dep">↳ PD-004</span></div>
-          <div class="crit-close"><span>Cierre</span> Decisiones de ambiente documentadas y aprobadas.</div>
-        </article>
-        <article class="obj" data-prio="crit" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-009</span>
-            <span class="pill crit">Crítico</span>
-            <span class="dates">12-jul-2026 → 18-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-009" data-prio="crit" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-009">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-009</span>
+              <span class="pill crit">Crítico</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">12-jul-2026 → 18-jul-2026</span>
+            </div>
+            <h4>Validación del modelo financiero base</h4>
+            <p>Ticket promedio, proyección de cubiertos, punto de equilibrio, fee corporativo, margen objetivo. Ancla del organigrama y la plantilla.</p>
+            <div class="task-foot"><span class="tag">Finanzas</span><span class="tag">Marihelys</span><span class="dep">↳ PD-005</span></div>
+            <div class="crit-close"><span>Cierre</span> Modelo validado con Finanzas; metas de costo confirmadas.</div>
           </div>
-          <h4>Validación del modelo financiero base</h4>
-          <p>Ticket promedio, proyección de cubiertos, punto de equilibrio, fee corporativo, margen objetivo. Ancla del organigrama y la plantilla.</p>
-          <div class="obj-foot"><span class="tag">Finanzas</span><span class="tag">Marihelys</span><span class="dep">↳ PD-005</span></div>
-          <div class="crit-close"><span>Cierre</span> Modelo validado con Finanzas; metas de costo confirmadas.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-010</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">12-jul-2026 → 18-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-010" data-prio="alto" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-010">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-010</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">12-jul-2026 → 18-jul-2026</span>
+            </div>
+            <h4>Distribución de cocina y aprobación por Operaciones</h4>
+            <p>Layout de cocina (estaciones, flujo de trabajo, ubicación de equipo y línea de smash) revisado y aprobado formalmente por Operaciones antes de iniciar obra. Evita retrabajos en sitio.</p>
+            <div class="task-foot"><span class="tag">Operaciones</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-006, PD-002</span></div>
+            <div class="crit-close"><span>Cierre</span> Distribución de cocina firmada por Operaciones; entregada a Expansión.</div>
           </div>
-          <h4>Distribución de cocina y aprobación por Operaciones</h4>
-          <p>Layout de cocina (estaciones, flujo de trabajo, ubicación de equipo y línea de smash) revisado y aprobado formalmente por Operaciones antes de iniciar obra. Evita retrabajos en sitio.</p>
-          <div class="obj-foot"><span class="tag">Operaciones</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-006, PD-002</span></div>
-          <div class="crit-close"><span>Cierre</span> Distribución de cocina firmada por Operaciones; entregada a Expansión.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-011</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">14-jul-2026 → 18-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-011" data-prio="alto" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-011">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-011</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">14-jul-2026 → 18-jul-2026</span>
+            </div>
+            <h4>Plantilla operativa con RRHH</h4>
+            <p>Estructura óptima de personal: posiciones, turnos, horarios. Incluye rol de Host (módulo de entrada). Lección La Mexicana: no sobrecontratar.</p>
+            <div class="task-foot"><span class="tag">RRHH</span><span class="tag">Dir. Operaciones</span><span class="dep">↳ PD-002, PD-006</span></div>
+            <div class="crit-close"><span>Cierre</span> Organigrama y plantilla aprobados con funciones del Host.</div>
           </div>
-          <h4>Plantilla operativa con RRHH</h4>
-          <p>Estructura óptima de personal: posiciones, turnos, horarios. Incluye rol de Host (módulo de entrada). Lección La Mexicana: no sobrecontratar.</p>
-          <div class="obj-foot"><span class="tag">RRHH</span><span class="tag">Dir. Operaciones</span><span class="dep">↳ PD-002, PD-006</span></div>
-          <div class="crit-close"><span>Cierre</span> Organigrama y plantilla aprobados con funciones del Host.</div>
-        </article>
-        <article class="obj" data-prio="crit" style="--accent:#E8500A">
-          <div class="obj-head">
-            <span class="code">PD-012</span>
-            <span class="pill crit">Crítico</span>
-            <span class="dates">18-jul-2026 → 25-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-012" data-prio="crit" data-status="pendiente" data-phase="F1" style="--accent:#E8500A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-012">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-012</span>
+              <span class="pill crit">Crítico</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">18-jul-2026 → 25-jul-2026</span>
+            </div>
+            <h4>Plan maestro de obra con fechas</h4>
+            <p>Expansión entrega cronograma completo de obra, contratistas e instalación con fecha comprometida de entrega operativa. Ancla todo el timeline.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="tag">Liz</span><span class="dep">↳ PD-006, PD-010</span></div>
+            <div class="crit-close"><span>Cierre</span> Cronograma maestro de obra publicado con fechas comprometidas.</div>
           </div>
-          <h4>Plan maestro de obra con fechas</h4>
-          <p>Expansión entrega cronograma completo de obra, contratistas e instalación con fecha comprometida de entrega operativa. Ancla todo el timeline.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="tag">Liz</span><span class="dep">↳ PD-006, PD-010</span></div>
-          <div class="crit-close"><span>Cierre</span> Cronograma maestro de obra publicado con fechas comprometidas.</div>
-        </article></div>
+        </li></ul>
       </section>
 
       <section class="phase" id="F2" style="--accent:#C9421E">
@@ -391,296 +521,452 @@ footer p{font-size:13px; max-width:640px; margin:12px auto 0;}
           <div class="phase-id">F2</div>
           <div>
             <h3>Obra, Trámites y Abasto</h3>
-            <div class="phase-meta">19 jul – 31 ago · 26 tareas · 2 críticas</div>
+            <div class="phase-meta">19 jul – 31 ago · 26 tareas · 2 críticas · <b class="ph-done" data-phase="F2" data-total="26">0</b>/26 finalizadas</div>
           </div>
         </header>
-        <div class="obj-grid">
-        <article class="obj" data-prio="crit" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-013</span>
-            <span class="pill crit">Crítico</span>
-            <span class="dates">19-jul-2026 → 15-ago-2026</span>
+        <ul class="task-list">
+        <li class="task" data-id="PD-013" data-prio="crit" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-013">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-013</span>
+              <span class="pill crit">Crítico</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">19-jul-2026 → 15-ago-2026</span>
+            </div>
+            <h4>Solución logística CDP para el Roof</h4>
+            <p>El camión de distribución no accede al Roof. Definir ruta alternativa (elevadores u otros), capacidad y plan de abasto.</p>
+            <div class="task-foot"><span class="tag">CDP</span><span class="dep">↳ PD-001</span></div>
+            <div class="crit-close"><span>Cierre</span> Plan logístico aprobado con ruta, frecuencia y capacidad.</div>
           </div>
-          <h4>Solución logística CDP para el Roof</h4>
-          <p>El camión de distribución no accede al Roof. Definir ruta alternativa (elevadores u otros), capacidad y plan de abasto.</p>
-          <div class="obj-foot"><span class="tag">CDP</span><span class="dep">↳ PD-001</span></div>
-          <div class="crit-close"><span>Cierre</span> Plan logístico aprobado con ruta, frecuencia y capacidad.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-014</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">19-jul-2026 → 31-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-014" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-014">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-014</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">19-jul-2026 → 31-jul-2026</span>
+            </div>
+            <h4>Contrato y reglamento Parque Delta</h4>
+            <p>Contrato de arrendamiento, reglamento interno y fechas de entrega del local. Coordinación con administración de Parque Delta. Encabeza la Carpeta Legal.</p>
+            <div class="task-foot"><span class="tag">Legal</span><span class="tag">Proyectos</span><span class="dep">↳ PD-006</span></div>
+            <div class="crit-close"><span>Cierre</span> Contrato firmado y reglamento recibido y revisado.</div>
           </div>
-          <h4>Contrato y reglamento Parque Delta</h4>
-          <p>Contrato de arrendamiento, reglamento interno y fechas de entrega del local. Coordinación con administración de Parque Delta. Encabeza la Carpeta Legal.</p>
-          <div class="obj-foot"><span class="tag">Legal</span><span class="tag">Proyectos</span><span class="dep">↳ PD-006</span></div>
-          <div class="crit-close"><span>Cierre</span> Contrato firmado y reglamento recibido y revisado.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-015</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">19-jul-2026 → 31-jul-2026</span>
+        </li>
+        <li class="task" data-id="PD-015" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-015">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-015</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">19-jul-2026 → 31-jul-2026</span>
+            </div>
+            <h4>Cuenta bancaria de la sucursal</h4>
+            <p>Cuenta específica para Chubbies Parque Delta. Lista para vender desde el día uno.</p>
+            <div class="task-foot"><span class="tag">Finanzas</span><span class="tag">Marihelys</span><span class="dep">↳ PD-014</span></div>
+            <div class="crit-close"><span>Cierre</span> Cuenta abierta y operativa.</div>
           </div>
-          <h4>Cuenta bancaria de la sucursal</h4>
-          <p>Cuenta específica para Chubbies Parque Delta. Lista para vender desde el día uno.</p>
-          <div class="obj-foot"><span class="tag">Finanzas</span><span class="tag">Marihelys</span><span class="dep">↳ PD-014</span></div>
-          <div class="crit-close"><span>Cierre</span> Cuenta abierta y operativa.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-016</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">19-jul-2026 → 12-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-016" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-016">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-016</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">19-jul-2026 → 12-ago-2026</span>
+            </div>
+            <h4>Seguro de responsabilidad civil</h4>
+            <p>Cotización y contratación de RC.</p>
+            <div class="task-foot"><span class="tag">Finanzas</span><span class="dep">↳ PD-014</span></div>
+            <div class="crit-close"><span>Cierre</span> Póliza de RC contratada y vigente.</div>
           </div>
-          <h4>Seguro de responsabilidad civil</h4>
-          <p>Cotización y contratación de RC.</p>
-          <div class="obj-foot"><span class="tag">Finanzas</span><span class="dep">↳ PD-014</span></div>
-          <div class="crit-close"><span>Cierre</span> Póliza de RC contratada y vigente.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-017</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">19-jul-2026 → 10-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-017" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-017">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-017</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">19-jul-2026 → 10-ago-2026</span>
+            </div>
+            <h4>Nombre comercial / marca</h4>
+            <p>Registro/uso de nombre comercial de la sucursal.</p>
+            <div class="task-foot"><span class="tag">Legal</span></div>
+            <div class="crit-close"><span>Cierre</span> Nombre comercial registrado o validado.</div>
           </div>
-          <h4>Nombre comercial / marca</h4>
-          <p>Registro/uso de nombre comercial de la sucursal.</p>
-          <div class="obj-foot"><span class="tag">Legal</span></div>
-          <div class="crit-close"><span>Cierre</span> Nombre comercial registrado o validado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-018</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">19-jul-2026 → 12-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-018" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-018">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-018</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">19-jul-2026 → 12-ago-2026</span>
+            </div>
+            <h4>Seguro de daños</h4>
+            <p>Cobertura contra fuego, agua y robo de la sucursal.</p>
+            <div class="task-foot"><span class="tag">Finanzas</span><span class="dep">↳ PD-014</span></div>
+            <div class="crit-close"><span>Cierre</span> Póliza de daños contratada y entregada a contabilidad.</div>
           </div>
-          <h4>Seguro de daños</h4>
-          <p>Cobertura contra fuego, agua y robo de la sucursal.</p>
-          <div class="obj-foot"><span class="tag">Finanzas</span><span class="dep">↳ PD-014</span></div>
-          <div class="crit-close"><span>Cierre</span> Póliza de daños contratada y entregada a contabilidad.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-019</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">25-jul-2026 → 05-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-019" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-019">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-019</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">25-jul-2026 → 05-ago-2026</span>
+            </div>
+            <h4>Demoliciones y preparación</h4>
+            <p>Demolición y retiro (si aplica), preparación del local entregado por la plaza.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-012</span></div>
+            <div class="crit-close"><span>Cierre</span> Local preparado y libre de escombro.</div>
           </div>
-          <h4>Demoliciones y preparación</h4>
-          <p>Demolición y retiro (si aplica), preparación del local entregado por la plaza.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-012</span></div>
-          <div class="crit-close"><span>Cierre</span> Local preparado y libre de escombro.</div>
-        </article>
-        <article class="obj" data-prio="crit" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-020</span>
-            <span class="pill crit">Crítico</span>
-            <span class="dates">28-jul-2026 → 20-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-020" data-prio="crit" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-020">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-020</span>
+              <span class="pill crit">Crítico</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-jul-2026 → 20-ago-2026</span>
+            </div>
+            <h4>Instalación de gas y dictamen</h4>
+            <p>Tendido de gas para plancha/smash y certificación. El dictamen de gas se integra a la Carpeta Legal como soporte de permisos.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="tag">Legal</span><span class="dep">↳ PD-012</span></div>
+            <div class="crit-close"><span>Cierre</span> Dictamen de gas emitido y vigente, archivado en Carpeta Legal.</div>
           </div>
-          <h4>Instalación de gas y dictamen</h4>
-          <p>Tendido de gas para plancha/smash y certificación. El dictamen de gas se integra a la Carpeta Legal como soporte de permisos.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="tag">Legal</span><span class="dep">↳ PD-012</span></div>
-          <div class="crit-close"><span>Cierre</span> Dictamen de gas emitido y vigente, archivado en Carpeta Legal.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-021</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">28-jul-2026 → 18-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-021" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-021">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-021</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-jul-2026 → 18-ago-2026</span>
+            </div>
+            <h4>Instalación hidráulica y sanitaria</h4>
+            <p>Plomería, tarjas, suministro y drenajes de cocina y área de servicio.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="tag">Mantenimiento</span><span class="dep">↳ PD-012</span></div>
+            <div class="crit-close"><span>Cierre</span> Instalación probada sin fugas.</div>
           </div>
-          <h4>Instalación hidráulica y sanitaria</h4>
-          <p>Plomería, tarjas, suministro y drenajes de cocina y área de servicio.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="tag">Mantenimiento</span><span class="dep">↳ PD-012</span></div>
-          <div class="crit-close"><span>Cierre</span> Instalación probada sin fugas.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-022</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">28-jul-2026 → 20-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-022" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-022">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-022</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-jul-2026 → 20-ago-2026</span>
+            </div>
+            <h4>Instalación eléctrica y tableros</h4>
+            <p>Cargas de cocina, kioscos, pantallas, refrigeración y clima. Tableros y protecciones.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-012</span></div>
+            <div class="crit-close"><span>Cierre</span> Instalación energizada y verificada por Mantenimiento.</div>
           </div>
-          <h4>Instalación eléctrica y tableros</h4>
-          <p>Cargas de cocina, kioscos, pantallas, refrigeración y clima. Tableros y protecciones.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-012</span></div>
-          <div class="crit-close"><span>Cierre</span> Instalación energizada y verificada por Mantenimiento.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-023</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">31-jul-2026 → 12-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-023" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-023">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-023</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">31-jul-2026 → 12-ago-2026</span>
+            </div>
+            <h4>Uso de suelo / giro</h4>
+            <p>Verificación de uso de suelo y giro para el local en la plaza.</p>
+            <div class="task-foot"><span class="tag">Legal</span><span class="dep">↳ PD-014</span></div>
+            <div class="crit-close"><span>Cierre</span> Uso de suelo y giro confirmados.</div>
           </div>
-          <h4>Uso de suelo / giro</h4>
-          <p>Verificación de uso de suelo y giro para el local en la plaza.</p>
-          <div class="obj-foot"><span class="tag">Legal</span><span class="dep">↳ PD-014</span></div>
-          <div class="crit-close"><span>Cierre</span> Uso de suelo y giro confirmados.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-024</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">31-jul-2026 → 10-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-024" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-024">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-024</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">31-jul-2026 → 10-ago-2026</span>
+            </div>
+            <h4>Terminales bancarias y caja</h4>
+            <p>Terminales/clips, caja registradora y cajón de dinero instalados y probados.</p>
+            <div class="task-foot"><span class="tag">Finanzas</span><span class="dep">↳ PD-015</span></div>
+            <div class="crit-close"><span>Cierre</span> Terminales instaladas y probadas; caja lista.</div>
           </div>
-          <h4>Terminales bancarias y caja</h4>
-          <p>Terminales/clips, caja registradora y cajón de dinero instalados y probados.</p>
-          <div class="obj-foot"><span class="tag">Finanzas</span><span class="dep">↳ PD-015</span></div>
-          <div class="crit-close"><span>Cierre</span> Terminales instaladas y probadas; caja lista.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-025</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">01-ago-2026 → 22-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-025" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-025">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-025</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-ago-2026 → 22-ago-2026</span>
+            </div>
+            <h4>Sistema de extracción y campana</h4>
+            <p>Campana, ductería y motor de extracción según normativa y reglamento de la plaza.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-012</span></div>
+            <div class="crit-close"><span>Cierre</span> Extracción instalada y con pruebas de funcionamiento.</div>
           </div>
-          <h4>Sistema de extracción y campana</h4>
-          <p>Campana, ductería y motor de extracción según normativa y reglamento de la plaza.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-012</span></div>
-          <div class="crit-close"><span>Cierre</span> Extracción instalada y con pruebas de funcionamiento.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-026</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">01-ago-2026 → 15-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-026" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-026">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-026</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-ago-2026 → 15-ago-2026</span>
+            </div>
+            <h4>Pitch editorial a revistas (lead 3 meses)</h4>
+            <p>Contacto y pitch a revistas/medios impresos. Las revistas requieren ~3 meses de anticipación, por lo que la gestión arranca en agosto para asegurar cobertura en la apertura de noviembre.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="tag">Brand PM</span><span class="dep">↳ PD-004</span></div>
+            <div class="crit-close"><span>Cierre</span> Cobertura editorial comprometida o agendada para noviembre.</div>
           </div>
-          <h4>Pitch editorial a revistas (lead 3 meses)</h4>
-          <p>Contacto y pitch a revistas/medios impresos. Las revistas requieren ~3 meses de anticipación, por lo que la gestión arranca en agosto para asegurar cobertura en la apertura de noviembre.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="tag">Brand PM</span><span class="dep">↳ PD-004</span></div>
-          <div class="crit-close"><span>Cierre</span> Cobertura editorial comprometida o agendada para noviembre.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-027</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">01-ago-2026 → 25-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-027" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-027">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-027</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-ago-2026 → 25-ago-2026</span>
+            </div>
+            <h4>Clima / ventilación</h4>
+            <p>Aire acondicionado y ventilación del área de cocina y cliente (condiciones del Roof).</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-012</span></div>
+            <div class="crit-close"><span>Cierre</span> Clima instalado y probado.</div>
           </div>
-          <h4>Clima / ventilación</h4>
-          <p>Aire acondicionado y ventilación del área de cocina y cliente (condiciones del Roof).</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-012</span></div>
-          <div class="crit-close"><span>Cierre</span> Clima instalado y probado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-028</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">01-ago-2026 → 20-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-028" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-028">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-028</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-ago-2026 → 20-ago-2026</span>
+            </div>
+            <h4>Capacidad de almacenamiento en sitio</h4>
+            <p>Definir almacenamiento seco, refrigerado y congelado disponible vs. demanda diaria.</p>
+            <div class="task-foot"><span class="tag">CDP</span><span class="tag">Operaciones</span><span class="dep">↳ PD-013</span></div>
+            <div class="crit-close"><span>Cierre</span> Capacidad de almacenamiento documentada y suficiente.</div>
           </div>
-          <h4>Capacidad de almacenamiento en sitio</h4>
-          <p>Definir almacenamiento seco, refrigerado y congelado disponible vs. demanda diaria.</p>
-          <div class="obj-foot"><span class="tag">CDP</span><span class="tag">Operaciones</span><span class="dep">↳ PD-013</span></div>
-          <div class="crit-close"><span>Cierre</span> Capacidad de almacenamiento documentada y suficiente.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-029</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">04-ago-2026 → 25-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-029" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-029">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-029</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">04-ago-2026 → 25-ago-2026</span>
+            </div>
+            <h4>Voz y datos / cableado</h4>
+            <p>Cableado estructurado para FoodBot (POS), kioscos, pantallas, cámaras y Wi-Fi.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="tag">Sistemas</span><span class="dep">↳ PD-012</span></div>
+            <div class="crit-close"><span>Cierre</span> Cableado terminado y certificado; listo para equipos.</div>
           </div>
-          <h4>Voz y datos / cableado</h4>
-          <p>Cableado estructurado para FoodBot (POS), kioscos, pantallas, cámaras y Wi-Fi.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="tag">Sistemas</span><span class="dep">↳ PD-012</span></div>
-          <div class="crit-close"><span>Cierre</span> Cableado terminado y certificado; listo para equipos.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-030</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">15-ago-2026 → 25-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-030" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-030">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-030</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">15-ago-2026 → 25-oct-2026</span>
+            </div>
+            <h4>Contenido de expectativa</h4>
+            <p>Behind-the-scenes desde obra/montaje y cuenta regresiva. Activar branding con tiempo. No abrir sin escándalo.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-001</span></div>
+            <div class="crit-close"><span>Cierre</span> Mínimo 3 piezas de expectativa publicadas en redes.</div>
           </div>
-          <h4>Contenido de expectativa</h4>
-          <p>Behind-the-scenes desde obra/montaje y cuenta regresiva. Activar branding con tiempo. No abrir sin escándalo.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-001</span></div>
-          <div class="crit-close"><span>Cierre</span> Mínimo 3 piezas de expectativa publicadas en redes.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-031</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">05-ago-2026 → 15-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-031" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-031">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-031</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-ago-2026 → 15-ago-2026</span>
+            </div>
+            <h4>Aviso de funcionamiento (BJ)</h4>
+            <p>Aviso de funcionamiento ante alcaldía Benito Juárez.</p>
+            <div class="task-foot"><span class="tag">Legal</span><span class="dep">↳ PD-023</span></div>
+            <div class="crit-close"><span>Cierre</span> Aviso de funcionamiento tramitado.</div>
           </div>
-          <h4>Aviso de funcionamiento (BJ)</h4>
-          <p>Aviso de funcionamiento ante alcaldía Benito Juárez.</p>
-          <div class="obj-foot"><span class="tag">Legal</span><span class="dep">↳ PD-023</span></div>
-          <div class="crit-close"><span>Cierre</span> Aviso de funcionamiento tramitado.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-032</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">05-ago-2026 → 20-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-032" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-032">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-032</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-ago-2026 → 20-sep-2026</span>
+            </div>
+            <h4>Protección Civil</h4>
+            <p>Programa interno de PC, extintores, señalética de evacuación, plan de contingencia y capacitación.</p>
+            <div class="task-foot"><span class="tag">Legal</span><span class="tag">Operaciones</span><span class="dep">↳ PD-014</span></div>
+            <div class="crit-close"><span>Cierre</span> Programa interno de PC integrado y aprobado.</div>
           </div>
-          <h4>Protección Civil</h4>
-          <p>Programa interno de PC, extintores, señalética de evacuación, plan de contingencia y capacitación.</p>
-          <div class="obj-foot"><span class="tag">Legal</span><span class="tag">Operaciones</span><span class="dep">↳ PD-014</span></div>
-          <div class="crit-close"><span>Cierre</span> Programa interno de PC integrado y aprobado.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-033</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">05-ago-2026 → 25-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-033" data-prio="alto" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-033">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-033</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-ago-2026 → 25-ago-2026</span>
+            </div>
+            <h4>Aviso sanitario / COFEPRIS</h4>
+            <p>Aviso de funcionamiento sanitario para manejo de alimentos.</p>
+            <div class="task-foot"><span class="tag">Legal</span><span class="dep">↳ PD-023</span></div>
+            <div class="crit-close"><span>Cierre</span> Aviso sanitario tramitado.</div>
           </div>
-          <h4>Aviso sanitario / COFEPRIS</h4>
-          <p>Aviso de funcionamiento sanitario para manejo de alimentos.</p>
-          <div class="obj-foot"><span class="tag">Legal</span><span class="dep">↳ PD-023</span></div>
-          <div class="crit-close"><span>Cierre</span> Aviso sanitario tramitado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-034</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">05-ago-2026 → 20-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-034" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-034">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-034</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-ago-2026 → 20-ago-2026</span>
+            </div>
+            <h4>Permiso de anuncios exteriores</h4>
+            <p>Permiso para colocación de letreros / señalética exterior.</p>
+            <div class="task-foot"><span class="tag">Legal</span><span class="tag">Marketing</span><span class="dep">↳ PD-014</span></div>
+            <div class="crit-close"><span>Cierre</span> Permiso de anuncios obtenido o en proceso documentado.</div>
           </div>
-          <h4>Permiso de anuncios exteriores</h4>
-          <p>Permiso para colocación de letreros / señalética exterior.</p>
-          <div class="obj-foot"><span class="tag">Legal</span><span class="tag">Marketing</span><span class="dep">↳ PD-014</span></div>
-          <div class="crit-close"><span>Cierre</span> Permiso de anuncios obtenido o en proceso documentado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-035</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">05-ago-2026 → 25-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-035" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-035">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-035</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-ago-2026 → 25-ago-2026</span>
+            </div>
+            <h4>Plan de abasto y mermas</h4>
+            <p>Frecuencia de pedidos, niveles mínimos y control de mermas (carne, pan, papa).</p>
+            <div class="task-foot"><span class="tag">CDP</span><span class="tag">Compras</span><span class="dep">↳ PD-013</span></div>
+            <div class="crit-close"><span>Cierre</span> Plan de abasto definido con niveles mínimos.</div>
           </div>
-          <h4>Plan de abasto y mermas</h4>
-          <p>Frecuencia de pedidos, niveles mínimos y control de mermas (carne, pan, papa).</p>
-          <div class="obj-foot"><span class="tag">CDP</span><span class="tag">Compras</span><span class="dep">↳ PD-013</span></div>
-          <div class="crit-close"><span>Cierre</span> Plan de abasto definido con niveles mínimos.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-036</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">05-ago-2026 → 30-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-036" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-036">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-036</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-ago-2026 → 30-ago-2026</span>
+            </div>
+            <h4>Recolección de residuos</h4>
+            <p>Protocolo de basura y residuos de cocina conforme a reglamento de la plaza.</p>
+            <div class="task-foot"><span class="tag">Operaciones</span><span class="dep">↳ PD-014</span></div>
+            <div class="crit-close"><span>Cierre</span> Horario y protocolo de residuos confirmados.</div>
           </div>
-          <h4>Recolección de residuos</h4>
-          <p>Protocolo de basura y residuos de cocina conforme a reglamento de la plaza.</p>
-          <div class="obj-foot"><span class="tag">Operaciones</span><span class="dep">↳ PD-014</span></div>
-          <div class="crit-close"><span>Cierre</span> Horario y protocolo de residuos confirmados.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-037</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">05-ago-2026 → 20-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-037" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-037">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-037</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-ago-2026 → 20-ago-2026</span>
+            </div>
+            <h4>Visita de Mantenimiento</h4>
+            <p>Reconocimiento físico: accesos, ductos, motores, instalaciones. Integrar a plan de mantenimiento preventivo.</p>
+            <div class="task-foot"><span class="tag">Mantenimiento</span><span class="dep">↳ PD-001</span></div>
+            <div class="crit-close"><span>Cierre</span> Reporte entregado; sucursal integrada al plan preventivo.</div>
           </div>
-          <h4>Visita de Mantenimiento</h4>
-          <p>Reconocimiento físico: accesos, ductos, motores, instalaciones. Integrar a plan de mantenimiento preventivo.</p>
-          <div class="obj-foot"><span class="tag">Mantenimiento</span><span class="dep">↳ PD-001</span></div>
-          <div class="crit-close"><span>Cierre</span> Reporte entregado; sucursal integrada al plan preventivo.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#C9421E">
-          <div class="obj-head">
-            <span class="code">PD-038</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">05-ago-2026 → 20-ago-2026</span>
+        </li>
+        <li class="task" data-id="PD-038" data-prio="medio" data-status="pendiente" data-phase="F2" style="--accent:#C9421E">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-038">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-038</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-ago-2026 → 20-ago-2026</span>
+            </div>
+            <h4>Integración contable y facturación</h4>
+            <p>Integración al sistema de cobros corporativo, alta de clips, facturación e IVA alimentos/bebidas.</p>
+            <div class="task-foot"><span class="tag">Finanzas</span><span class="tag">Marihelys</span><span class="dep">↳ PD-015</span></div>
+            <div class="crit-close"><span>Cierre</span> Sucursal integrada al sistema contable y facturación activa.</div>
           </div>
-          <h4>Integración contable y facturación</h4>
-          <p>Integración al sistema de cobros corporativo, alta de clips, facturación e IVA alimentos/bebidas.</p>
-          <div class="obj-foot"><span class="tag">Finanzas</span><span class="tag">Marihelys</span><span class="dep">↳ PD-015</span></div>
-          <div class="crit-close"><span>Cierre</span> Sucursal integrada al sistema contable y facturación activa.</div>
-        </article></div>
+        </li></ul>
       </section>
 
       <section class="phase" id="F3" style="--accent:#B26A12">
@@ -688,219 +974,333 @@ footer p{font-size:13px; max-width:640px; margin:12px auto 0;}
           <div class="phase-id">F3</div>
           <div>
             <h3>Instalación, Sistemas y Equipo</h3>
-            <div class="phase-meta">25 ago – 20 sep · 19 tareas · 0 críticas</div>
+            <div class="phase-meta">25 ago – 20 sep · 19 tareas · 0 críticas · <b class="ph-done" data-phase="F3" data-total="19">0</b>/19 finalizadas</div>
           </div>
         </header>
-        <div class="obj-grid">
-        <article class="obj" data-prio="alto" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-039</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">25-ago-2026 → 02-sep-2026</span>
+        <ul class="task-list">
+        <li class="task" data-id="PD-039" data-prio="alto" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-039">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-039</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">25-ago-2026 → 02-sep-2026</span>
+            </div>
+            <h4>Configuración del POS (FoodBot)</h4>
+            <p>FoodBot ya está implementado en la marca: dar de alta la sucursal y cargar menú (categorías, modificadores, precios). No es una implementación desde cero.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Tecnología</span><span class="dep">↳ PD-015, PD-029</span></div>
+            <div class="crit-close"><span>Cierre</span> Sucursal dada de alta en FoodBot; menú cargado y pruebas de cobro exitosas.</div>
           </div>
-          <h4>Configuración del POS (FoodBot)</h4>
-          <p>FoodBot ya está implementado en la marca: dar de alta la sucursal y cargar menú (categorías, modificadores, precios). No es una implementación desde cero.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Tecnología</span><span class="dep">↳ PD-015, PD-029</span></div>
-          <div class="crit-close"><span>Cierre</span> Sucursal dada de alta en FoodBot; menú cargado y pruebas de cobro exitosas.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-040</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">25-ago-2026 → 05-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-040" data-prio="alto" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-040">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-040</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">25-ago-2026 → 05-sep-2026</span>
+            </div>
+            <h4>Red / Wi-Fi dedicado</h4>
+            <p>Internet dedicado con respaldo para FoodBot, kioscos y pantallas; modo offline probado.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="dep">↳ PD-029</span></div>
+            <div class="crit-close"><span>Cierre</span> Red operativa con respaldo y modo offline verificado.</div>
           </div>
-          <h4>Red / Wi-Fi dedicado</h4>
-          <p>Internet dedicado con respaldo para FoodBot, kioscos y pantallas; modo offline probado.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="dep">↳ PD-029</span></div>
-          <div class="crit-close"><span>Cierre</span> Red operativa con respaldo y modo offline verificado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-041</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">25-ago-2026 → 01-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-041" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-041">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-041</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">25-ago-2026 → 01-sep-2026</span>
+            </div>
+            <h4>Pisos</h4>
+            <p>Piso antiderrapante de cocina + acabado de área cliente.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-019</span></div>
+            <div class="crit-close"><span>Cierre</span> Pisos instalados y sellados.</div>
           </div>
-          <h4>Pisos</h4>
-          <p>Piso antiderrapante de cocina + acabado de área cliente.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-019</span></div>
-          <div class="crit-close"><span>Cierre</span> Pisos instalados y sellados.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-042</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">28-ago-2026 → 08-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-042" data-prio="alto" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-042">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-042</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-ago-2026 → 08-sep-2026</span>
+            </div>
+            <h4>Instalación de kioscos de autoservicio</h4>
+            <p>Instalar y configurar kioscos. Pruebas de flujo de pedido y cobro completo.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Tecnología</span><span class="dep">↳ PD-039, PD-029</span></div>
+            <div class="crit-close"><span>Cierre</span> Kioscos instalados, conectados a FoodBot y probados con pedidos reales.</div>
           </div>
-          <h4>Instalación de kioscos de autoservicio</h4>
-          <p>Instalar y configurar kioscos. Pruebas de flujo de pedido y cobro completo.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Tecnología</span><span class="dep">↳ PD-039, PD-029</span></div>
-          <div class="crit-close"><span>Cierre</span> Kioscos instalados, conectados a FoodBot y probados con pedidos reales.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-043</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">28-ago-2026 → 08-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-043" data-prio="alto" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-043">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-043</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-ago-2026 → 08-sep-2026</span>
+            </div>
+            <h4>KDS / display de cocina</h4>
+            <p>Pantalla de cocina integrada a FoodBot y a los kioscos para flujo de comandas.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="dep">↳ PD-039</span></div>
+            <div class="crit-close"><span>Cierre</span> KDS integrado y probado en flujo real.</div>
           </div>
-          <h4>KDS / display de cocina</h4>
-          <p>Pantalla de cocina integrada a FoodBot y a los kioscos para flujo de comandas.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="dep">↳ PD-039</span></div>
-          <div class="crit-close"><span>Cierre</span> KDS integrado y probado en flujo real.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-044</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">28-ago-2026 → 05-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-044" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-044">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-044</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-ago-2026 → 05-sep-2026</span>
+            </div>
+            <h4>Luminarias e iluminación</h4>
+            <p>Riel, tiras LED, lámparas y neón según diseño de ambiente.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="tag">Marketing</span><span class="dep">↳ PD-022</span></div>
+            <div class="crit-close"><span>Cierre</span> Iluminación instalada conforme al diseño.</div>
           </div>
-          <h4>Luminarias e iluminación</h4>
-          <p>Riel, tiras LED, lámparas y neón según diseño de ambiente.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="tag">Marketing</span><span class="dep">↳ PD-022</span></div>
-          <div class="crit-close"><span>Cierre</span> Iluminación instalada conforme al diseño.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-045</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">30-ago-2026 → 08-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-045" data-prio="alto" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-045">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-045</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">30-ago-2026 → 08-sep-2026</span>
+            </div>
+            <h4>Barra / mostrador / estación Host</h4>
+            <p>Mostrador de cobro, estación del Host y módulo de kioscos.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-041</span></div>
+            <div class="crit-close"><span>Cierre</span> Mostrador y estación Host instalados y funcionales.</div>
           </div>
-          <h4>Barra / mostrador / estación Host</h4>
-          <p>Mostrador de cobro, estación del Host y módulo de kioscos.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-041</span></div>
-          <div class="crit-close"><span>Cierre</span> Mostrador y estación Host instalados y funcionales.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-046</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">30-ago-2026 → 10-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-046" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-046">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-046</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">30-ago-2026 → 10-sep-2026</span>
+            </div>
+            <h4>Mobiliario y carpintería</h4>
+            <p>Mesas, bancos y sillas del área cliente según aforo definido.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-005</span></div>
+            <div class="crit-close"><span>Cierre</span> Mobiliario instalado conforme a aforo.</div>
           </div>
-          <h4>Mobiliario y carpintería</h4>
-          <p>Mesas, bancos y sillas del área cliente según aforo definido.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-005</span></div>
-          <div class="crit-close"><span>Cierre</span> Mobiliario instalado conforme a aforo.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-047</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">01-sep-2026 → 08-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-047" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-047">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-047</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-sep-2026 → 08-sep-2026</span>
+            </div>
+            <h4>Acabados, pintura y revestimientos</h4>
+            <p>Acabados finales de muros y áreas operativas.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-041</span></div>
+            <div class="crit-close"><span>Cierre</span> Acabados terminados sin pendientes.</div>
           </div>
-          <h4>Acabados, pintura y revestimientos</h4>
-          <p>Acabados finales de muros y áreas operativas.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="dep">↳ PD-041</span></div>
-          <div class="crit-close"><span>Cierre</span> Acabados terminados sin pendientes.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-048</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">01-sep-2026 → 08-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-048" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-048">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-048</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-sep-2026 → 08-sep-2026</span>
+            </div>
+            <h4>Pantalla de menú sobre caja</h4>
+            <p>Instalación y configuración de pantalla de menú digital sobre caja.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Marketing</span><span class="dep">↳ PD-039</span></div>
+            <div class="crit-close"><span>Cierre</span> Pantalla instalada mostrando menú correcto.</div>
           </div>
-          <h4>Pantalla de menú sobre caja</h4>
-          <p>Instalación y configuración de pantalla de menú digital sobre caja.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Marketing</span><span class="dep">↳ PD-039</span></div>
-          <div class="crit-close"><span>Cierre</span> Pantalla instalada mostrando menú correcto.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-049</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">01-sep-2026 → 08-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-049" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-049">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-049</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-sep-2026 → 08-sep-2026</span>
+            </div>
+            <h4>Pantalla de ambiente exterior</h4>
+            <p>Pantalla de ambiente/contenido exterior (ref. Shake de Reforma).</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Marketing</span><span class="dep">↳ PD-029</span></div>
+            <div class="crit-close"><span>Cierre</span> Pantalla exterior instalada con contenido inicial.</div>
           </div>
-          <h4>Pantalla de ambiente exterior</h4>
-          <p>Pantalla de ambiente/contenido exterior (ref. Shake de Reforma).</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Marketing</span><span class="dep">↳ PD-029</span></div>
-          <div class="crit-close"><span>Cierre</span> Pantalla exterior instalada con contenido inicial.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-050</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">01-sep-2026 → 10-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-050" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-050">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-050</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-sep-2026 → 10-sep-2026</span>
+            </div>
+            <h4>Cámaras de seguridad</h4>
+            <p>Instalación y configuración de cámaras / monitoreo del local.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="dep">↳ PD-029</span></div>
+            <div class="crit-close"><span>Cierre</span> Cámaras instaladas y grabando.</div>
           </div>
-          <h4>Cámaras de seguridad</h4>
-          <p>Instalación y configuración de cámaras / monitoreo del local.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="dep">↳ PD-029</span></div>
-          <div class="crit-close"><span>Cierre</span> Cámaras instaladas y grabando.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-051</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">04-sep-2026 → 12-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-051" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-051">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-051</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">04-sep-2026 → 12-sep-2026</span>
+            </div>
+            <h4>Señalética y branding físico</h4>
+            <p>Señalética interior, exterior y elementos de marca del local.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="tag">Marketing</span><span class="dep">↳ PD-022, PD-047</span></div>
+            <div class="crit-close"><span>Cierre</span> Señalética y branding instalados; permiso de anuncios vigente.</div>
           </div>
-          <h4>Señalética y branding físico</h4>
-          <p>Señalética interior, exterior y elementos de marca del local.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="tag">Marketing</span><span class="dep">↳ PD-022, PD-047</span></div>
-          <div class="crit-close"><span>Cierre</span> Señalética y branding instalados; permiso de anuncios vigente.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-052</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">04-sep-2026 → 12-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-052" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-052">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-052</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">04-sep-2026 → 12-sep-2026</span>
+            </div>
+            <h4>Audio y sonido ambiental</h4>
+            <p>Bocinas instaladas y playlist por daypart (no shuffle genérico).</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Marketing</span><span class="dep">↳ PD-029</span></div>
+            <div class="crit-close"><span>Cierre</span> Audio instalado; playlist curada por daypart cargada.</div>
           </div>
-          <h4>Audio y sonido ambiental</h4>
-          <p>Bocinas instaladas y playlist por daypart (no shuffle genérico).</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Marketing</span><span class="dep">↳ PD-029</span></div>
-          <div class="crit-close"><span>Cierre</span> Audio instalado; playlist curada por daypart cargada.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-053</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">04-sep-2026 → 10-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-053" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-053">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-053</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">04-sep-2026 → 10-sep-2026</span>
+            </div>
+            <h4>Gmail y WhatsApp Business</h4>
+            <p>Canales de comunicación específicos de la sucursal en manos del gerente.</p>
+            <div class="task-foot"><span class="tag">Calidad</span><span class="tag">Sistemas</span></div>
+            <div class="crit-close"><span>Cierre</span> Gmail y WhatsApp activos y entregados al gerente.</div>
           </div>
-          <h4>Gmail y WhatsApp Business</h4>
-          <p>Canales de comunicación específicos de la sucursal en manos del gerente.</p>
-          <div class="obj-foot"><span class="tag">Calidad</span><span class="tag">Sistemas</span></div>
-          <div class="crit-close"><span>Cierre</span> Gmail y WhatsApp activos y entregados al gerente.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-054</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">04-sep-2026 → 12-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-054" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-054">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-054</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">04-sep-2026 → 12-sep-2026</span>
+            </div>
+            <h4>Suscripciones operativas</h4>
+            <p>Spotify, Google Workspace y plan de telefonía/celular de la sucursal.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Operaciones</span></div>
+            <div class="crit-close"><span>Cierre</span> Suscripciones activas y pagadas.</div>
           </div>
-          <h4>Suscripciones operativas</h4>
-          <p>Spotify, Google Workspace y plan de telefonía/celular de la sucursal.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Operaciones</span></div>
-          <div class="crit-close"><span>Cierre</span> Suscripciones activas y pagadas.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-055</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">05-sep-2026 → 20-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-055" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-055">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-055</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-sep-2026 → 20-sep-2026</span>
+            </div>
+            <h4>Plataformas de delivery preparadas</h4>
+            <p>Alta, fotos, menú y precios en plataformas — listas para activar, no necesariamente encendidas al inicio.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Marketing</span><span class="dep">↳ PD-039</span></div>
+            <div class="crit-close"><span>Cierre</span> Perfiles de delivery listos para activar a demanda.</div>
           </div>
-          <h4>Plataformas de delivery preparadas</h4>
-          <p>Alta, fotos, menú y precios en plataformas — listas para activar, no necesariamente encendidas al inicio.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Marketing</span><span class="dep">↳ PD-039</span></div>
-          <div class="crit-close"><span>Cierre</span> Perfiles de delivery listos para activar a demanda.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-056</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">10-sep-2026 → 14-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-056" data-prio="medio" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-056">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-056</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-sep-2026 → 14-sep-2026</span>
+            </div>
+            <h4>Limpieza post-obra</h4>
+            <p>Limpieza general posterior a obra antes de montaje de equipo.</p>
+            <div class="task-foot"><span class="tag">Expansión</span><span class="tag">Operaciones</span><span class="dep">↳ PD-047</span></div>
+            <div class="crit-close"><span>Cierre</span> Local limpio y listo para montaje.</div>
           </div>
-          <h4>Limpieza post-obra</h4>
-          <p>Limpieza general posterior a obra antes de montaje de equipo.</p>
-          <div class="obj-foot"><span class="tag">Expansión</span><span class="tag">Operaciones</span><span class="dep">↳ PD-047</span></div>
-          <div class="crit-close"><span>Cierre</span> Local limpio y listo para montaje.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#B26A12">
-          <div class="obj-head">
-            <span class="code">PD-057</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">12-sep-2026 → 18-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-057" data-prio="alto" data-status="pendiente" data-phase="F3" style="--accent:#B26A12">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-057">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-057</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">12-sep-2026 → 18-sep-2026</span>
+            </div>
+            <h4>Pruebas integrales del stack</h4>
+            <p>Pruebas de todo el sistema: offline, cuentas divididas, modificadores, devoluciones y errores.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Operaciones</span><span class="dep">↳ PD-042, PD-043, PD-040</span></div>
+            <div class="crit-close"><span>Cierre</span> Todas las pruebas pasadas y documentadas.</div>
           </div>
-          <h4>Pruebas integrales del stack</h4>
-          <p>Pruebas de todo el sistema: offline, cuentas divididas, modificadores, devoluciones y errores.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Operaciones</span><span class="dep">↳ PD-042, PD-043, PD-040</span></div>
-          <div class="crit-close"><span>Cierre</span> Todas las pruebas pasadas y documentadas.</div>
-        </article></div>
+        </li></ul>
       </section>
 
       <section class="phase" id="F4" style="--accent:#6E8B2A">
@@ -908,219 +1308,333 @@ footer p{font-size:13px; max-width:640px; margin:12px auto 0;}
           <div class="phase-id">F4</div>
           <div>
             <h3>Equipo, Producto y Capacitación</h3>
-            <div class="phase-meta">1 sep – 3 oct · 19 tareas · 1 críticas</div>
+            <div class="phase-meta">1 sep – 3 oct · 19 tareas · 1 críticas · <b class="ph-done" data-phase="F4" data-total="19">0</b>/19 finalizadas</div>
           </div>
         </header>
-        <div class="obj-grid">
-        <article class="obj" data-prio="crit" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-058</span>
-            <span class="pill crit">Crítico</span>
-            <span class="dates">01-sep-2026 → 10-sep-2026</span>
+        <ul class="task-list">
+        <li class="task" data-id="PD-058" data-prio="crit" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-058">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-058</span>
+              <span class="pill crit">Crítico</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-sep-2026 → 10-sep-2026</span>
+            </div>
+            <h4>Contratación del Gerente</h4>
+            <p>Preferir candidato interno. Mínimo 3 semanas de capacitación antes de apertura. Primer contratado.</p>
+            <div class="task-foot"><span class="tag">RRHH</span><span class="dep">↳ PD-011</span></div>
+            <div class="crit-close"><span>Cierre</span> Gerente contratado y en proceso de capacitación.</div>
           </div>
-          <h4>Contratación del Gerente</h4>
-          <p>Preferir candidato interno. Mínimo 3 semanas de capacitación antes de apertura. Primer contratado.</p>
-          <div class="obj-foot"><span class="tag">RRHH</span><span class="dep">↳ PD-011</span></div>
-          <div class="crit-close"><span>Cierre</span> Gerente contratado y en proceso de capacitación.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-059</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">01-sep-2026 → 12-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-059" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-059">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-059</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-sep-2026 → 12-sep-2026</span>
+            </div>
+            <h4>Organigrama vs. presupuesto de nómina</h4>
+            <p>Cerrar estructura: puestos, headcount, salarios, bonos y propinas validados contra ingreso proyectado. Incluye dejar turnos, propinas y bonos por escrito.</p>
+            <div class="task-foot"><span class="tag">RRHH</span><span class="tag">Finanzas</span><span class="dep">↳ PD-009, PD-011</span></div>
+            <div class="crit-close"><span>Cierre</span> Estructura cerrada dentro de meta de costo laboral; esquema de turnos/propinas/bonos por escrito.</div>
           </div>
-          <h4>Organigrama vs. presupuesto de nómina</h4>
-          <p>Cerrar estructura: puestos, headcount, salarios, bonos y propinas validados contra ingreso proyectado. Incluye dejar turnos, propinas y bonos por escrito.</p>
-          <div class="obj-foot"><span class="tag">RRHH</span><span class="tag">Finanzas</span><span class="dep">↳ PD-009, PD-011</span></div>
-          <div class="crit-close"><span>Cierre</span> Estructura cerrada dentro de meta de costo laboral; esquema de turnos/propinas/bonos por escrito.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-060</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">05-sep-2026 → 22-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-060" data-prio="medio" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-060">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-060</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-sep-2026 → 22-sep-2026</span>
+            </div>
+            <h4>Uniformes</h4>
+            <p>Producción y entrega de uniformes antes del primer día de capacitación.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="tag">RRHH</span><span class="dep">↳ PD-008</span></div>
+            <div class="crit-close"><span>Cierre</span> Uniformes entregados y correctos antes de capacitación.</div>
           </div>
-          <h4>Uniformes</h4>
-          <p>Producción y entrega de uniformes antes del primer día de capacitación.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="tag">RRHH</span><span class="dep">↳ PD-008</span></div>
-          <div class="crit-close"><span>Cierre</span> Uniformes entregados y correctos antes de capacitación.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-061</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">08-sep-2026 → 25-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-061" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-061">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-061</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">08-sep-2026 → 25-sep-2026</span>
+            </div>
+            <h4>Reclutamiento y entrevistas</h4>
+            <p>Publicación de vacantes, entrevistas y selección. Internos para liderazgo.</p>
+            <div class="task-foot"><span class="tag">RRHH</span><span class="dep">↳ PD-058</span></div>
+            <div class="crit-close"><span>Cierre</span> Candidatos seleccionados para todas las posiciones.</div>
           </div>
-          <h4>Reclutamiento y entrevistas</h4>
-          <p>Publicación de vacantes, entrevistas y selección. Internos para liderazgo.</p>
-          <div class="obj-foot"><span class="tag">RRHH</span><span class="dep">↳ PD-058</span></div>
-          <div class="crit-close"><span>Cierre</span> Candidatos seleccionados para todas las posiciones.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-062</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">08-sep-2026 → 15-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-062" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-062">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-062</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">08-sep-2026 → 15-sep-2026</span>
+            </div>
+            <h4>Manuales operativos y fichas técnicas</h4>
+            <p>Dir. Gastronómica actualiza manuales, fichas, ayudas visuales y protocolos. Incluir desayunos si se confirma la decisión.</p>
+            <div class="task-foot"><span class="tag">Dir. Gastronómica</span><span class="tag">Calidad</span><span class="dep">↳ PD-002</span></div>
+            <div class="crit-close"><span>Cierre</span> Manuales publicados y accesibles a todo el equipo.</div>
           </div>
-          <h4>Manuales operativos y fichas técnicas</h4>
-          <p>Dir. Gastronómica actualiza manuales, fichas, ayudas visuales y protocolos. Incluir desayunos si se confirma la decisión.</p>
-          <div class="obj-foot"><span class="tag">Dir. Gastronómica</span><span class="tag">Calidad</span><span class="dep">↳ PD-002</span></div>
-          <div class="crit-close"><span>Cierre</span> Manuales publicados y accesibles a todo el equipo.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-063</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">08-sep-2026 → 18-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-063" data-prio="medio" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-063">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-063</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">08-sep-2026 → 18-sep-2026</span>
+            </div>
+            <h4>Verificación de equipo menor de cocina</h4>
+            <p>Confirmar existencia y estado de smashers, palas, termómetros, rejillas. Comprar faltantes.</p>
+            <div class="task-foot"><span class="tag">Dir. Gastronómica</span><span class="tag">Ops</span><span class="dep">↳ PD-006</span></div>
+            <div class="crit-close"><span>Cierre</span> Inventario de equipo menor completo y en sucursal.</div>
           </div>
-          <h4>Verificación de equipo menor de cocina</h4>
-          <p>Confirmar existencia y estado de smashers, palas, termómetros, rejillas. Comprar faltantes.</p>
-          <div class="obj-foot"><span class="tag">Dir. Gastronómica</span><span class="tag">Ops</span><span class="dep">↳ PD-006</span></div>
-          <div class="crit-close"><span>Cierre</span> Inventario de equipo menor completo y en sucursal.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-064</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">10-sep-2026 → 20-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-064" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-064">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-064</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-sep-2026 → 20-sep-2026</span>
+            </div>
+            <h4>Estándares de smash burger</h4>
+            <p>Gramaje, sellado, tiempos y emplatado del producto estrella. Reference set fotográfico.</p>
+            <div class="task-foot"><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-062</span></div>
+            <div class="crit-close"><span>Cierre</span> Estándares documentados con foto de referencia por producto.</div>
           </div>
-          <h4>Estándares de smash burger</h4>
-          <p>Gramaje, sellado, tiempos y emplatado del producto estrella. Reference set fotográfico.</p>
-          <div class="obj-foot"><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-062</span></div>
-          <div class="crit-close"><span>Cierre</span> Estándares documentados con foto de referencia por producto.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-065</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">10-sep-2026 → 25-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-065" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-065">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-065</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-sep-2026 → 25-sep-2026</span>
+            </div>
+            <h4>Proveedores e insumos</h4>
+            <p>Alta de proveedores y primeras entregas: carne, pan, papa, abarrotes. Probados en cocina.</p>
+            <div class="task-foot"><span class="tag">Compras</span><span class="tag">CDP</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-013</span></div>
+            <div class="crit-close"><span>Cierre</span> Proveedores contratados; primeras entregas recibidas y probadas.</div>
           </div>
-          <h4>Proveedores e insumos</h4>
-          <p>Alta de proveedores y primeras entregas: carne, pan, papa, abarrotes. Probados en cocina.</p>
-          <div class="obj-foot"><span class="tag">Compras</span><span class="tag">CDP</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-013</span></div>
-          <div class="crit-close"><span>Cierre</span> Proveedores contratados; primeras entregas recibidas y probadas.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-066</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">10-sep-2026 → 30-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-066" data-prio="medio" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-066">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-066</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-sep-2026 → 30-sep-2026</span>
+            </div>
+            <h4>Loza, utensilios y empaque</h4>
+            <p>Compra y recepción de loza, utensilios, charolas y empaque (incl. empaque delivery).</p>
+            <div class="task-foot"><span class="tag">Compras</span><span class="tag">Operaciones</span><span class="dep">↳ PD-004</span></div>
+            <div class="crit-close"><span>Cierre</span> Equipamiento completo y en sucursal.</div>
           </div>
-          <h4>Loza, utensilios y empaque</h4>
-          <p>Compra y recepción de loza, utensilios, charolas y empaque (incl. empaque delivery).</p>
-          <div class="obj-foot"><span class="tag">Compras</span><span class="tag">Operaciones</span><span class="dep">↳ PD-004</span></div>
-          <div class="crit-close"><span>Cierre</span> Equipamiento completo y en sucursal.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-067</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">12-sep-2026 → 25-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-067" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-067">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-067</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">12-sep-2026 → 25-sep-2026</span>
+            </div>
+            <h4>Escandallos y costeo de producto</h4>
+            <p>Costeo de cada producto y validación del food cost objetivo.</p>
+            <div class="task-foot"><span class="tag">Dir. Gastronómica</span><span class="tag">Finanzas</span><span class="dep">↳ PD-064</span></div>
+            <div class="crit-close"><span>Cierre</span> Escandallos completos; food cost dentro de meta.</div>
           </div>
-          <h4>Escandallos y costeo de producto</h4>
-          <p>Costeo de cada producto y validación del food cost objetivo.</p>
-          <div class="obj-foot"><span class="tag">Dir. Gastronómica</span><span class="tag">Finanzas</span><span class="dep">↳ PD-064</span></div>
-          <div class="crit-close"><span>Cierre</span> Escandallos completos; food cost dentro de meta.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-068</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">15-sep-2026 → 30-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-068" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-068">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-068</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">15-sep-2026 → 30-sep-2026</span>
+            </div>
+            <h4>Contratación equipo de cocina (BOH)</h4>
+            <p>Contratar plantilla de cocina. No contratar antes de tiempo (lección La Mexicana).</p>
+            <div class="task-foot"><span class="tag">RRHH</span><span class="dep">↳ PD-061</span></div>
+            <div class="crit-close"><span>Cierre</span> Equipo de cocina contratado y documentado en Asana.</div>
           </div>
-          <h4>Contratación equipo de cocina (BOH)</h4>
-          <p>Contratar plantilla de cocina. No contratar antes de tiempo (lección La Mexicana).</p>
-          <div class="obj-foot"><span class="tag">RRHH</span><span class="dep">↳ PD-061</span></div>
-          <div class="crit-close"><span>Cierre</span> Equipo de cocina contratado y documentado en Asana.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-069</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">20-sep-2026 → 01-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-069" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-069">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-069</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">20-sep-2026 → 01-oct-2026</span>
+            </div>
+            <h4>Contratación equipo de salón (FOH)</h4>
+            <p>Contratar caja, salón y Host. Internos para liderazgo.</p>
+            <div class="task-foot"><span class="tag">RRHH</span><span class="dep">↳ PD-061</span></div>
+            <div class="crit-close"><span>Cierre</span> 100% de la plantilla contratada y documentada.</div>
           </div>
-          <h4>Contratación equipo de salón (FOH)</h4>
-          <p>Contratar caja, salón y Host. Internos para liderazgo.</p>
-          <div class="obj-foot"><span class="tag">RRHH</span><span class="dep">↳ PD-061</span></div>
-          <div class="crit-close"><span>Cierre</span> 100% de la plantilla contratada y documentada.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-070</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">20-sep-2026 → 30-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-070" data-prio="medio" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-070">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-070</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">20-sep-2026 → 30-sep-2026</span>
+            </div>
+            <h4>Carga y validación de menú (FoodBot)</h4>
+            <p>Carga final del menú en FoodBot y validación cruzada con precios y modificadores.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-039, PD-067</span></div>
+            <div class="crit-close"><span>Cierre</span> Menú validado al 100% en FoodBot.</div>
           </div>
-          <h4>Carga y validación de menú (FoodBot)</h4>
-          <p>Carga final del menú en FoodBot y validación cruzada con precios y modificadores.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-039, PD-067</span></div>
-          <div class="crit-close"><span>Cierre</span> Menú validado al 100% en FoodBot.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-071</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">20-sep-2026 → 30-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-071" data-prio="medio" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-071">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-071</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">20-sep-2026 → 30-sep-2026</span>
+            </div>
+            <h4>Menús impresos y material de mesa</h4>
+            <p>Menús, porta-menús y material de mesa producidos y revisados.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-070</span></div>
+            <div class="crit-close"><span>Cierre</span> Material impreso entregado y revisado.</div>
           </div>
-          <h4>Menús impresos y material de mesa</h4>
-          <p>Menús, porta-menús y material de mesa producidos y revisados.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-070</span></div>
-          <div class="crit-close"><span>Cierre</span> Material impreso entregado y revisado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-072</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">20-sep-2026 → 30-sep-2026</span>
+        </li>
+        <li class="task" data-id="PD-072" data-prio="medio" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-072">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-072</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">20-sep-2026 → 30-sep-2026</span>
+            </div>
+            <h4>Fondo de caja y protocolo de efectivo</h4>
+            <p>Caja fuerte, fondo de apertura y protocolo de manejo de efectivo entrenado con gerente y cajero.</p>
+            <div class="task-foot"><span class="tag">Finanzas</span><span class="dep">↳ PD-024</span></div>
+            <div class="crit-close"><span>Cierre</span> Caja fuerte instalada, fondo confirmado y protocolo entrenado.</div>
           </div>
-          <h4>Fondo de caja y protocolo de efectivo</h4>
-          <p>Caja fuerte, fondo de apertura y protocolo de manejo de efectivo entrenado con gerente y cajero.</p>
-          <div class="obj-foot"><span class="tag">Finanzas</span><span class="dep">↳ PD-024</span></div>
-          <div class="crit-close"><span>Cierre</span> Caja fuerte instalada, fondo confirmado y protocolo entrenado.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-073</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">25-sep-2026 → 03-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-073" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-073">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-073</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">25-sep-2026 → 03-oct-2026</span>
+            </div>
+            <h4>Capacitación en preparación de producto</h4>
+            <p>Capacitar cocina en smash burgers, estándares, tiempos y protocolos de calidad.</p>
+            <div class="task-foot"><span class="tag">Dir. Gastronómica</span><span class="tag">Ops</span><span class="dep">↳ PD-068, PD-062</span></div>
+            <div class="crit-close"><span>Cierre</span> 100% del equipo de cocina capacitado; registro firmado.</div>
           </div>
-          <h4>Capacitación en preparación de producto</h4>
-          <p>Capacitar cocina en smash burgers, estándares, tiempos y protocolos de calidad.</p>
-          <div class="obj-foot"><span class="tag">Dir. Gastronómica</span><span class="tag">Ops</span><span class="dep">↳ PD-068, PD-062</span></div>
-          <div class="crit-close"><span>Cierre</span> 100% del equipo de cocina capacitado; registro firmado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-074</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">25-sep-2026 → 03-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-074" data-prio="medio" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-074">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-074</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">25-sep-2026 → 03-oct-2026</span>
+            </div>
+            <h4>Inducción y cultura de servicio</h4>
+            <p>Doctrina de hospitalidad, estándares de atención y cultura Chubbies. Briefing de marca.</p>
+            <div class="task-foot"><span class="tag">Cultura</span><span class="tag">Operaciones</span><span class="dep">↳ PD-069</span></div>
+            <div class="crit-close"><span>Cierre</span> Inducción completada y registrada.</div>
           </div>
-          <h4>Inducción y cultura de servicio</h4>
-          <p>Doctrina de hospitalidad, estándares de atención y cultura Chubbies. Briefing de marca.</p>
-          <div class="obj-foot"><span class="tag">Cultura</span><span class="tag">Operaciones</span><span class="dep">↳ PD-069</span></div>
-          <div class="crit-close"><span>Cierre</span> Inducción completada y registrada.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-075</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">28-sep-2026 → 03-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-075" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-075">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-075</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-sep-2026 → 03-oct-2026</span>
+            </div>
+            <h4>Capacitación estación Host</h4>
+            <p>Flujo de entrada, kioscos, acompañamiento al cliente y manejo de filas.</p>
+            <div class="task-foot"><span class="tag">Operaciones</span><span class="dep">↳ PD-069, PD-042</span></div>
+            <div class="crit-close"><span>Cierre</span> Equipo Host capacitado; flujo probado.</div>
           </div>
-          <h4>Capacitación estación Host</h4>
-          <p>Flujo de entrada, kioscos, acompañamiento al cliente y manejo de filas.</p>
-          <div class="obj-foot"><span class="tag">Operaciones</span><span class="dep">↳ PD-069, PD-042</span></div>
-          <div class="crit-close"><span>Cierre</span> Equipo Host capacitado; flujo probado.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#6E8B2A">
-          <div class="obj-head">
-            <span class="code">PD-076</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">28-sep-2026 → 03-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-076" data-prio="alto" data-status="pendiente" data-phase="F4" style="--accent:#6E8B2A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-076">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-076</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-sep-2026 → 03-oct-2026</span>
+            </div>
+            <h4>Capacitación en POS (FoodBot) y kioscos</h4>
+            <p>FoodBot, flujo de cobro, kioscos y pantallas. Manejo de devoluciones y errores.</p>
+            <div class="task-foot"><span class="tag">Sistemas</span><span class="tag">Ops</span><span class="dep">↳ PD-042, PD-069</span></div>
+            <div class="crit-close"><span>Cierre</span> Todo el equipo capacitado; pruebas de cobro exitosas.</div>
           </div>
-          <h4>Capacitación en POS (FoodBot) y kioscos</h4>
-          <p>FoodBot, flujo de cobro, kioscos y pantallas. Manejo de devoluciones y errores.</p>
-          <div class="obj-foot"><span class="tag">Sistemas</span><span class="tag">Ops</span><span class="dep">↳ PD-042, PD-069</span></div>
-          <div class="crit-close"><span>Cierre</span> Todo el equipo capacitado; pruebas de cobro exitosas.</div>
-        </article></div>
+        </li></ul>
       </section>
 
       <section class="phase" id="F5" style="--accent:#2E7D6B">
@@ -1128,175 +1642,265 @@ footer p{font-size:13px; max-width:640px; margin:12px auto 0;}
           <div class="phase-id">F5</div>
           <div>
             <h3>Marketing, Pruebas y Lanzamiento</h3>
-            <div class="phase-meta">1 oct – 3 nov · 15 tareas · 1 críticas</div>
+            <div class="phase-meta">1 oct – 3 nov · 15 tareas · 1 críticas · <b class="ph-done" data-phase="F5" data-total="15">0</b>/15 finalizadas</div>
           </div>
         </header>
-        <div class="obj-grid">
-        <article class="obj" data-prio="alto" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-077</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">01-oct-2026 → 10-oct-2026</span>
+        <ul class="task-list">
+        <li class="task" data-id="PD-077" data-prio="alto" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-077">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-077</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-oct-2026 → 10-oct-2026</span>
+            </div>
+            <h4>Alta y verificación en Google Maps</h4>
+            <p>Crear y verificar el nuevo perfil de la sucursal en Google Maps antes de apertura. Estrategia de reseñas activa desde el día uno.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-034</span></div>
+            <div class="crit-close"><span>Cierre</span> Perfil de Google Maps publicado y verificado; primera tanda de reseñas activada.</div>
           </div>
-          <h4>Alta y verificación en Google Maps</h4>
-          <p>Crear y verificar el nuevo perfil de la sucursal en Google Maps antes de apertura. Estrategia de reseñas activa desde el día uno.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-034</span></div>
-          <div class="crit-close"><span>Cierre</span> Perfil de Google Maps publicado y verificado; primera tanda de reseñas activada.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-078</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">01-oct-2026 → 10-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-078" data-prio="medio" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-078">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-078</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-oct-2026 → 10-oct-2026</span>
+            </div>
+            <h4>Plan de contenido de sucursal (perfiles existentes)</h4>
+            <p>IG, TikTok y Facebook ya operan a nivel marca. Preparar contenido y anuncio de apertura específicos de Parque Delta; no se crean perfiles nuevos.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="tag">Community</span></div>
+            <div class="crit-close"><span>Cierre</span> Calendario de contenido de apertura listo en los perfiles de marca.</div>
           </div>
-          <h4>Plan de contenido de sucursal (perfiles existentes)</h4>
-          <p>IG, TikTok y Facebook ya operan a nivel marca. Preparar contenido y anuncio de apertura específicos de Parque Delta; no se crean perfiles nuevos.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="tag">Community</span></div>
-          <div class="crit-close"><span>Cierre</span> Calendario de contenido de apertura listo en los perfiles de marca.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-079</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">05-oct-2026 → 15-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-079" data-prio="alto" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-079">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-079</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">05-oct-2026 → 15-oct-2026</span>
+            </div>
+            <h4>Sesión fotográfica de producto</h4>
+            <p>Platillos hero, bebidas y empaque. Se detona con menú bloqueado y cocina operativa.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-064</span></div>
+            <div class="crit-close"><span>Cierre</span> Set fotográfico de producto completo.</div>
           </div>
-          <h4>Sesión fotográfica de producto</h4>
-          <p>Platillos hero, bebidas y empaque. Se detona con menú bloqueado y cocina operativa.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-064</span></div>
-          <div class="crit-close"><span>Cierre</span> Set fotográfico de producto completo.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-080</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">10-oct-2026 → 20-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-080" data-prio="medio" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-080">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-080</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-oct-2026 → 20-oct-2026</span>
+            </div>
+            <h4>Sesión fotográfica de local y marca</h4>
+            <p>Interior, exterior, kioscos, señalética y retratos de equipo. Se detona con espacio terminado.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-051</span></div>
+            <div class="crit-close"><span>Cierre</span> Set fotográfico de local y marca completo.</div>
           </div>
-          <h4>Sesión fotográfica de local y marca</h4>
-          <p>Interior, exterior, kioscos, señalética y retratos de equipo. Se detona con espacio terminado.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-051</span></div>
-          <div class="crit-close"><span>Cierre</span> Set fotográfico de local y marca completo.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-081</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">10-oct-2026 → 28-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-081" data-prio="medio" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-081">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-081</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-oct-2026 → 28-oct-2026</span>
+            </div>
+            <h4>Estrategia de influencers</h4>
+            <p>Selección por afinidad, no solo seguidores. Compromiso de contenido y fecha de publicación confirmados.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="tag">Community</span><span class="dep">↳ PD-079</span></div>
+            <div class="crit-close"><span>Cierre</span> Lista cerrada con entregables comprometidos.</div>
           </div>
-          <h4>Estrategia de influencers</h4>
-          <p>Selección por afinidad, no solo seguidores. Compromiso de contenido y fecha de publicación confirmados.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="tag">Community</span><span class="dep">↳ PD-079</span></div>
-          <div class="crit-close"><span>Cierre</span> Lista cerrada con entregables comprometidos.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-082</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">10-oct-2026 → 28-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-082" data-prio="medio" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-082">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-082</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-oct-2026 → 28-oct-2026</span>
+            </div>
+            <h4>PR de lanzamiento y cobertura de apertura</h4>
+            <p>Comunicado, media kit y plan de cobertura de la apertura. El pitch a revistas ya se gestionó en agosto (3 meses de anticipación).</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="tag">Brand PM</span><span class="dep">↳ PD-079</span></div>
+            <div class="crit-close"><span>Cierre</span> Kit de prensa entregado; plan de cobertura cerrado.</div>
           </div>
-          <h4>PR de lanzamiento y cobertura de apertura</h4>
-          <p>Comunicado, media kit y plan de cobertura de la apertura. El pitch a revistas ya se gestionó en agosto (3 meses de anticipación).</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="tag">Brand PM</span><span class="dep">↳ PD-079</span></div>
-          <div class="crit-close"><span>Cierre</span> Kit de prensa entregado; plan de cobertura cerrado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-083</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">15-oct-2026 → 30-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-083" data-prio="medio" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-083">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-083</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">15-oct-2026 → 30-oct-2026</span>
+            </div>
+            <h4>Plan de pauta y mailing</h4>
+            <p>Pauta en redes y mailing coordinados con la apertura.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-078</span></div>
+            <div class="crit-close"><span>Cierre</span> Pauta y mailing programados.</div>
           </div>
-          <h4>Plan de pauta y mailing</h4>
-          <p>Pauta en redes y mailing coordinados con la apertura.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-078</span></div>
-          <div class="crit-close"><span>Cierre</span> Pauta y mailing programados.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-084</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">15-oct-2026 → 30-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-084" data-prio="medio" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-084">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-084</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">15-oct-2026 → 30-oct-2026</span>
+            </div>
+            <h4>Estrategia de reseñas</h4>
+            <p>QR portado por mesero/Host (no en mesas); meta de reseñas y respuesta en 24h.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="tag">Operaciones</span><span class="dep">↳ PD-077</span></div>
+            <div class="crit-close"><span>Cierre</span> Mecánica de reseñas definida y equipo entrenado.</div>
           </div>
-          <h4>Estrategia de reseñas</h4>
-          <p>QR portado por mesero/Host (no en mesas); meta de reseñas y respuesta en 24h.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="tag">Operaciones</span><span class="dep">↳ PD-077</span></div>
-          <div class="crit-close"><span>Cierre</span> Mecánica de reseñas definida y equipo entrenado.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-085</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">20-oct-2026 → 22-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-085" data-prio="alto" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-085">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-085</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">20-oct-2026 → 22-oct-2026</span>
+            </div>
+            <h4>Auditoría de calidad pre-apertura</h4>
+            <p>Inspección integral: producto, limpieza, sistemas, flujo, señalética, extintores, protocolo de emergencias.</p>
+            <div class="task-foot"><span class="tag">Calidad</span><span class="tag">Ops</span><span class="dep">↳ PD-073, PD-076</span></div>
+            <div class="crit-close"><span>Cierre</span> Reporte sin puntos críticos abiertos; firmado por Calidad.</div>
           </div>
-          <h4>Auditoría de calidad pre-apertura</h4>
-          <p>Inspección integral: producto, limpieza, sistemas, flujo, señalética, extintores, protocolo de emergencias.</p>
-          <div class="obj-foot"><span class="tag">Calidad</span><span class="tag">Ops</span><span class="dep">↳ PD-073, PD-076</span></div>
-          <div class="crit-close"><span>Cierre</span> Reporte sin puntos críticos abiertos; firmado por Calidad.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-086</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">22-oct-2026 → 24-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-086" data-prio="medio" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-086">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-086</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">22-oct-2026 → 24-oct-2026</span>
+            </div>
+            <h4>Limpieza profunda pre-apertura</h4>
+            <p>Limpieza a fondo de cocina, comedor, baños, almacén y áreas operativas.</p>
+            <div class="task-foot"><span class="tag">Operaciones</span><span class="dep">↳ PD-056</span></div>
+            <div class="crit-close"><span>Cierre</span> Checklist de limpieza profunda completado y firmado.</div>
           </div>
-          <h4>Limpieza profunda pre-apertura</h4>
-          <p>Limpieza a fondo de cocina, comedor, baños, almacén y áreas operativas.</p>
-          <div class="obj-foot"><span class="tag">Operaciones</span><span class="dep">↳ PD-056</span></div>
-          <div class="crit-close"><span>Cierre</span> Checklist de limpieza profunda completado y firmado.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-087</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">25-oct-2026 → 27-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-087" data-prio="alto" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-087">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-087</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">25-oct-2026 → 27-oct-2026</span>
+            </div>
+            <h4>Pruebas de cocina (kitchen trial)</h4>
+            <p>Simulación real: tiempos de preparación, flujo de estaciones, capacidad bajo demanda. Ajustes finales.</p>
+            <div class="task-foot"><span class="tag">Ops</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-073, PD-086</span></div>
+            <div class="crit-close"><span>Cierre</span> Tiempos dentro de estándar; ajustes documentados.</div>
           </div>
-          <h4>Pruebas de cocina (kitchen trial)</h4>
-          <p>Simulación real: tiempos de preparación, flujo de estaciones, capacidad bajo demanda. Ajustes finales.</p>
-          <div class="obj-foot"><span class="tag">Ops</span><span class="tag">Dir. Gastronómica</span><span class="dep">↳ PD-073, PD-086</span></div>
-          <div class="crit-close"><span>Cierre</span> Tiempos dentro de estándar; ajustes documentados.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-088</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">28-oct-2026 → 29-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-088" data-prio="alto" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-088">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-088</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">28-oct-2026 → 29-oct-2026</span>
+            </div>
+            <h4>Dummy run interno</h4>
+            <p>Simulación de servicio completo con corporativo como comensales. Cada estación calificada; debrief inmediato.</p>
+            <div class="task-foot"><span class="tag">Ops</span><span class="tag">Calidad</span><span class="dep">↳ PD-087</span></div>
+            <div class="crit-close"><span>Cierre</span> Estándar de referencia documentado por Calidad.</div>
           </div>
-          <h4>Dummy run interno</h4>
-          <p>Simulación de servicio completo con corporativo como comensales. Cada estación calificada; debrief inmediato.</p>
-          <div class="obj-foot"><span class="tag">Ops</span><span class="tag">Calidad</span><span class="dep">↳ PD-087</span></div>
-          <div class="crit-close"><span>Cierre</span> Estándar de referencia documentado por Calidad.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-089</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">29-oct-2026 → 30-oct-2026</span>
+        </li>
+        <li class="task" data-id="PD-089" data-prio="alto" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-089">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-089</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">29-oct-2026 → 30-oct-2026</span>
+            </div>
+            <h4>Evento Friends &amp; Family</h4>
+            <p>Pre-apertura con invitados internos y cercanos. Servicio real; feedback estructurado.</p>
+            <div class="task-foot"><span class="tag">Ops</span><span class="tag">Marketing</span><span class="dep">↳ PD-088, PD-085</span></div>
+            <div class="crit-close"><span>Cierre</span> Evento realizado; puntos de mejora documentados.</div>
           </div>
-          <h4>Evento Friends &amp; Family</h4>
-          <p>Pre-apertura con invitados internos y cercanos. Servicio real; feedback estructurado.</p>
-          <div class="obj-foot"><span class="tag">Ops</span><span class="tag">Marketing</span><span class="dep">↳ PD-088, PD-085</span></div>
-          <div class="crit-close"><span>Cierre</span> Evento realizado; puntos de mejora documentados.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-090</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">01-nov-2026 → 02-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-090" data-prio="alto" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-090">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-090</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">01-nov-2026 → 02-nov-2026</span>
+            </div>
+            <h4>Soft opening con descuento</h4>
+            <p>Apertura simulada al público. Prueba de carga real: kioscos, Host, cocina y FoodBot bajo presión.</p>
+            <div class="task-foot"><span class="tag">Ops</span><span class="tag">Marketing</span><span class="dep">↳ PD-089</span></div>
+            <div class="crit-close"><span>Cierre</span> Soft opening realizado; reporte con métricas y ajustes.</div>
           </div>
-          <h4>Soft opening con descuento</h4>
-          <p>Apertura simulada al público. Prueba de carga real: kioscos, Host, cocina y FoodBot bajo presión.</p>
-          <div class="obj-foot"><span class="tag">Ops</span><span class="tag">Marketing</span><span class="dep">↳ PD-089</span></div>
-          <div class="crit-close"><span>Cierre</span> Soft opening realizado; reporte con métricas y ajustes.</div>
-        </article>
-        <article class="obj" data-prio="crit" style="--accent:#2E7D6B">
-          <div class="obj-head">
-            <span class="code">PD-091</span>
-            <span class="pill crit">Crítico</span>
-            <span class="dates">03-nov-2026 → 03-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-091" data-prio="crit" data-status="pendiente" data-phase="F5" style="--accent:#2E7D6B">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-091">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-091</span>
+              <span class="pill crit">Crítico</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">03-nov-2026 → 03-nov-2026</span>
+            </div>
+            <h4>Apertura oficial — campaña activa</h4>
+            <p>Apertura con influencers, medios y redes. No abrir lunes/martes sin campaña. Pauta y presencia coordinadas.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-090</span></div>
+            <div class="crit-close"><span>Cierre</span> Apertura oficial con cobertura activa en redes y medios.</div>
           </div>
-          <h4>Apertura oficial — campaña activa</h4>
-          <p>Apertura con influencers, medios y redes. No abrir lunes/martes sin campaña. Pauta y presencia coordinadas.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="dep">↳ PD-090</span></div>
-          <div class="crit-close"><span>Cierre</span> Apertura oficial con cobertura activa en redes y medios.</div>
-        </article></div>
+        </li></ul>
       </section>
 
       <section class="phase" id="F6" style="--accent:#2B5E8A">
@@ -1304,98 +1908,146 @@ footer p{font-size:13px; max-width:640px; margin:12px auto 0;}
           <div class="phase-id">F6</div>
           <div>
             <h3>Post-apertura y Estabilización</h3>
-            <div class="phase-meta">3 – 17 nov · 8 tareas · 0 críticas</div>
+            <div class="phase-meta">3 – 17 nov · 8 tareas · 0 críticas · <b class="ph-done" data-phase="F6" data-total="8">0</b>/8 finalizadas</div>
           </div>
         </header>
-        <div class="obj-grid">
-        <article class="obj" data-prio="alto" style="--accent:#2B5E8A">
-          <div class="obj-head">
-            <span class="code">PD-092</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">03-nov-2026 → 10-nov-2026</span>
+        <ul class="task-list">
+        <li class="task" data-id="PD-092" data-prio="alto" data-status="pendiente" data-phase="F6" style="--accent:#2B5E8A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-092">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-092</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">03-nov-2026 → 10-nov-2026</span>
+            </div>
+            <h4>Seguimiento intensivo primera semana</h4>
+            <p>Personal de apoyo experimentado 7-10 días. Monitoreo de ventas, calidad, operación y atención.</p>
+            <div class="task-foot"><span class="tag">Ops</span><span class="tag">Calidad</span><span class="dep">↳ PD-091</span></div>
+            <div class="crit-close"><span>Cierre</span> Reporte de primera semana entregado; operación estable.</div>
           </div>
-          <h4>Seguimiento intensivo primera semana</h4>
-          <p>Personal de apoyo experimentado 7-10 días. Monitoreo de ventas, calidad, operación y atención.</p>
-          <div class="obj-foot"><span class="tag">Ops</span><span class="tag">Calidad</span><span class="dep">↳ PD-091</span></div>
-          <div class="crit-close"><span>Cierre</span> Reporte de primera semana entregado; operación estable.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2B5E8A">
-          <div class="obj-head">
-            <span class="code">PD-093</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">03-nov-2026 → 10-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-093" data-prio="medio" data-status="pendiente" data-phase="F6" style="--accent:#2B5E8A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-093">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-093</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">03-nov-2026 → 10-nov-2026</span>
+            </div>
+            <h4>Debrief diario a PM</h4>
+            <p>Reporte diario de operación y ajustes durante la primera semana.</p>
+            <div class="task-foot"><span class="tag">Gerente</span><span class="tag">Brand PM</span><span class="dep">↳ PD-091</span></div>
+            <div class="crit-close"><span>Cierre</span> Debriefs diarios documentados.</div>
           </div>
-          <h4>Debrief diario a PM</h4>
-          <p>Reporte diario de operación y ajustes durante la primera semana.</p>
-          <div class="obj-foot"><span class="tag">Gerente</span><span class="tag">Brand PM</span><span class="dep">↳ PD-091</span></div>
-          <div class="crit-close"><span>Cierre</span> Debriefs diarios documentados.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2B5E8A">
-          <div class="obj-head">
-            <span class="code">PD-094</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">03-nov-2026 → 17-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-094" data-prio="medio" data-status="pendiente" data-phase="F6" style="--accent:#2B5E8A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-094">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-094</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">03-nov-2026 → 17-nov-2026</span>
+            </div>
+            <h4>Auditoría diaria de calidad</h4>
+            <p>Calidad revisa producto, tiempos, limpieza y experiencia cada servicio. Issues corregidos en 24h.</p>
+            <div class="task-foot"><span class="tag">Calidad</span><span class="tag">Ops</span><span class="dep">↳ PD-091</span></div>
+            <div class="crit-close"><span>Cierre</span> Auditorías diarias registradas; issues cerrados en 24h.</div>
           </div>
-          <h4>Auditoría diaria de calidad</h4>
-          <p>Calidad revisa producto, tiempos, limpieza y experiencia cada servicio. Issues corregidos en 24h.</p>
-          <div class="obj-foot"><span class="tag">Calidad</span><span class="tag">Ops</span><span class="dep">↳ PD-091</span></div>
-          <div class="crit-close"><span>Cierre</span> Auditorías diarias registradas; issues cerrados en 24h.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2B5E8A">
-          <div class="obj-head">
-            <span class="code">PD-095</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">03-nov-2026 → 17-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-095" data-prio="medio" data-status="pendiente" data-phase="F6" style="--accent:#2B5E8A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-095">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-095</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">03-nov-2026 → 17-nov-2026</span>
+            </div>
+            <h4>Ramp controlado de demanda</h4>
+            <p>Gestionar cubiertos para no saturar cocina y piso; aumentar volumen solo si la calidad se sostiene.</p>
+            <div class="task-foot"><span class="tag">Ops</span><span class="tag">Brand PM</span><span class="dep">↳ PD-091</span></div>
+            <div class="crit-close"><span>Cierre</span> Demanda gestionada sin saturación; calidad estable.</div>
           </div>
-          <h4>Ramp controlado de demanda</h4>
-          <p>Gestionar cubiertos para no saturar cocina y piso; aumentar volumen solo si la calidad se sostiene.</p>
-          <div class="obj-foot"><span class="tag">Ops</span><span class="tag">Brand PM</span><span class="dep">↳ PD-091</span></div>
-          <div class="crit-close"><span>Cierre</span> Demanda gestionada sin saturación; calidad estable.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2B5E8A">
-          <div class="obj-head">
-            <span class="code">PD-096</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">03-nov-2026 → 17-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-096" data-prio="medio" data-status="pendiente" data-phase="F6" style="--accent:#2B5E8A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-096">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-096</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">03-nov-2026 → 17-nov-2026</span>
+            </div>
+            <h4>Campaña de reseñas sostenida</h4>
+            <p>Meta de reseñas a 30-60 días; respuesta a cada reseña en 24h.</p>
+            <div class="task-foot"><span class="tag">Marketing</span><span class="tag">Ops</span><span class="dep">↳ PD-084</span></div>
+            <div class="crit-close"><span>Cierre</span> Meta de reseñas en curso; respuestas al día.</div>
           </div>
-          <h4>Campaña de reseñas sostenida</h4>
-          <p>Meta de reseñas a 30-60 días; respuesta a cada reseña en 24h.</p>
-          <div class="obj-foot"><span class="tag">Marketing</span><span class="tag">Ops</span><span class="dep">↳ PD-084</span></div>
-          <div class="crit-close"><span>Cierre</span> Meta de reseñas en curso; respuestas al día.</div>
-        </article>
-        <article class="obj" data-prio="alto" style="--accent:#2B5E8A">
-          <div class="obj-head">
-            <span class="code">PD-097</span>
-            <span class="pill alto">Alto</span>
-            <span class="dates">09-nov-2026 → 17-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-097" data-prio="alto" data-status="pendiente" data-phase="F6" style="--accent:#2B5E8A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-097">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-097</span>
+              <span class="pill alto">Alto</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">09-nov-2026 → 17-nov-2026</span>
+            </div>
+            <h4>Reporte semanal del lunes</h4>
+            <p>Brand PM entrega reporte cada lunes: avance, bloqueadores, gran logro, KPIs y decisiones.</p>
+            <div class="task-foot"><span class="tag">Brand PM</span><span class="dep">↳ PD-091</span></div>
+            <div class="crit-close"><span>Cierre</span> Primer reporte semanal post-apertura entregado.</div>
           </div>
-          <h4>Reporte semanal del lunes</h4>
-          <p>Brand PM entrega reporte cada lunes: avance, bloqueadores, gran logro, KPIs y decisiones.</p>
-          <div class="obj-foot"><span class="tag">Brand PM</span><span class="dep">↳ PD-091</span></div>
-          <div class="crit-close"><span>Cierre</span> Primer reporte semanal post-apertura entregado.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2B5E8A">
-          <div class="obj-head">
-            <span class="code">PD-098</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">10-nov-2026 → 17-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-098" data-prio="medio" data-status="pendiente" data-phase="F6" style="--accent:#2B5E8A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-098">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-098</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">10-nov-2026 → 17-nov-2026</span>
+            </div>
+            <h4>Activación de Delivery</h4>
+            <p>Solo tras consolidar el comedor. Alta en plataformas, empaque, radio de entrega y horarios.</p>
+            <div class="task-foot"><span class="tag">Ops</span><span class="tag">Marketing</span><span class="tag">CDP</span><span class="dep">↳ PD-092, PD-055</span></div>
+            <div class="crit-close"><span>Cierre</span> Sucursal activa en plataformas con primeros pedidos exitosos.</div>
           </div>
-          <h4>Activación de Delivery</h4>
-          <p>Solo tras consolidar el comedor. Alta en plataformas, empaque, radio de entrega y horarios.</p>
-          <div class="obj-foot"><span class="tag">Ops</span><span class="tag">Marketing</span><span class="tag">CDP</span><span class="dep">↳ PD-092, PD-055</span></div>
-          <div class="crit-close"><span>Cierre</span> Sucursal activa en plataformas con primeros pedidos exitosos.</div>
-        </article>
-        <article class="obj" data-prio="medio" style="--accent:#2B5E8A">
-          <div class="obj-head">
-            <span class="code">PD-099</span>
-            <span class="pill medio">Medio</span>
-            <span class="dates">17-nov-2026 → 17-nov-2026</span>
+        </li>
+        <li class="task" data-id="PD-099" data-prio="medio" data-status="pendiente" data-phase="F6" style="--accent:#2B5E8A">
+          <button class="status" type="button" aria-label="Cambiar estado de PD-099">
+            <span class="box"></span>
+          </button>
+          <div class="task-body">
+            <div class="task-top">
+              <span class="code">PD-099</span>
+              <span class="pill medio">Medio</span>
+              <span class="state-tag">Pendiente</span>
+              <span class="dates">17-nov-2026 → 17-nov-2026</span>
+            </div>
+            <h4>Cierre del programa y lecciones</h4>
+            <p>Transición a playbook operativo; consolidar lecciones aprendidas para próximas aperturas.</p>
+            <div class="task-foot"><span class="tag">Brand PM</span><span class="tag">Ops</span><span class="dep">↳ PD-092</span></div>
+            <div class="crit-close"><span>Cierre</span> Programa cerrado; documento de lecciones aprendidas entregado.</div>
           </div>
-          <h4>Cierre del programa y lecciones</h4>
-          <p>Transición a playbook operativo; consolidar lecciones aprendidas para próximas aperturas.</p>
-          <div class="obj-foot"><span class="tag">Brand PM</span><span class="tag">Ops</span><span class="dep">↳ PD-092</span></div>
-          <div class="crit-close"><span>Cierre</span> Programa cerrado; documento de lecciones aprendidas entregado.</div>
-        </article></div>
+        </li></ul>
       </section>
   </section>
 
@@ -1556,18 +2208,81 @@ const obs=new IntersectionObserver((es)=>{
 },{rootMargin:'-45% 0px -50% 0px'});
 document.querySelectorAll('main .section').forEach(s=>obs.observe(s));
 
-// priority filter
-const fbtns=[...document.querySelectorAll('#filters button')];
-fbtns.forEach(b=>b.addEventListener('click',()=>{
-  fbtns.forEach(x=>x.classList.remove('on')); b.classList.add('on');
-  const f=b.dataset.f;
-  document.querySelectorAll('.obj').forEach(o=>{
-    o.style.display = (f==='all'||o.dataset.prio===f) ? '' : 'none';
+// ---------- status tracking + persistence ----------
+const KEY='chubbies-delta-progress-v1';
+const ORDER=['pendiente','en-curso','finalizada'];
+const LABEL={'pendiente':'Pendiente','en-curso':'En curso','finalizada':'Finalizada'};
+const tasks=[...document.querySelectorAll('.task')];
+
+function load(){
+  try{ return JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ return {}; }
+}
+function save(state){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
+let state=load();
+
+function applyTask(li){
+  const st=state[li.dataset.id] || 'pendiente';
+  li.dataset.status=st;
+  const tag=li.querySelector('.state-tag'); if(tag) tag.textContent=LABEL[st];
+}
+function recompute(){
+  let done=0, prog=0, pend=0;
+  tasks.forEach(li=>{ const s=li.dataset.status;
+    if(s==='finalizada')done++; else if(s==='en-curso')prog++; else pend++; });
+  const total=tasks.length, pct=total?Math.round(done/total*100):0;
+  document.getElementById('barFill').style.width=pct+'%';
+  document.getElementById('pctDone').textContent=pct+'%';
+  document.getElementById('cntDone').textContent=done;
+  document.getElementById('cntProg').textContent=prog;
+  document.getElementById('cntPend').textContent=pend;
+  // per-phase finalizadas
+  document.querySelectorAll('.ph-done').forEach(el=>{
+    const ph=el.dataset.phase;
+    const n=tasks.filter(li=>li.dataset.phase===ph && li.dataset.status==='finalizada').length;
+    el.textContent=n;
+  });
+}
+
+tasks.forEach(li=>{
+  applyTask(li);
+  li.querySelector('.status').addEventListener('click',()=>{
+    const cur=li.dataset.status||'pendiente';
+    const next=ORDER[(ORDER.indexOf(cur)+1)%ORDER.length];
+    state[li.dataset.id]=next; save(state); applyTask(li); recompute(); applyFilters();
+  });
+});
+recompute();
+
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  if(!confirm('¿Reiniciar el avance? Se quitarán todas las marcas de este navegador.')) return;
+  state={}; save(state);
+  tasks.forEach(applyTask); recompute(); applyFilters();
+});
+
+// ---------- combined filters (prioridad + estado) ----------
+let pf='all', sf='all';
+function applyFilters(){
+  tasks.forEach(li=>{
+    const okP = pf==='all' || li.dataset.prio===pf;
+    const okS = sf==='all' || li.dataset.status===sf;
+    li.style.display = (okP && okS) ? '' : 'none';
   });
   document.querySelectorAll('.phase').forEach(p=>{
-    const vis=[...p.querySelectorAll('.obj')].some(o=>o.style.display!=='none');
+    const vis=[...p.querySelectorAll('.task')].some(o=>o.style.display!=='none');
     p.style.display = vis ? '' : 'none';
   });
+}
+const pBtns=[...document.querySelectorAll('#filters button')];
+pBtns.forEach(b=>b.addEventListener('click',()=>{
+  pBtns.forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  pf=b.dataset.f; applyFilters();
+}));
+const sBtns=[...document.querySelectorAll('#statusFilters button')];
+sBtns.forEach(b=>b.addEventListener('click',()=>{
+  sBtns.forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  sf=b.dataset.s; applyFilters();
 }));
 </script>
 </body>
